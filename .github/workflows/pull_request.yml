@@ -1,6 +1,8 @@
-name: "Dev 배포"
+name: "0.개발"
 
 on:
+  push:
+    branches: [ "develop" ]
   pull_request:
     branches: [ "develop" ]
 

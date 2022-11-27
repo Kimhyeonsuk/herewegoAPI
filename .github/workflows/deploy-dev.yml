@@ -1,4 +1,4 @@
-name: "Dev 배포"
+name: "1. Dev 배포"
 
 on:
   merge:
