@@ -33,7 +33,8 @@ jobs:
 #        run: mkdir deploy && cp target/*.jar deploy/ && cp appspec.yml deploy/ && cp -r scripts deploy/scripts
       # 압축
       - name: Make zip file
-        run: zip -r -qq -j herewegoapi.zip .
+#        run: zip -r -qq -j herewegoapi.zip .
+        run: zip -r ./herewegoapi.zip .
       # AWS 인증
       - name: AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
