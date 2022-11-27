@@ -19,7 +19,6 @@ public class ApiResponse {
 
     public static ApplicationContext applicationContext;
 
-    @Autowired
     public void setApplicationContext(ApplicationContext applicationContext) {
         ApiResponse.applicationContext = applicationContext;
     }
