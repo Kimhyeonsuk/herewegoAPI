@@ -1,7 +1,7 @@
 name: "Dev 배포"
 
 on:
-  merge:
+  pull_request:
     branches: [ "develop" ]
 
 jobs:
