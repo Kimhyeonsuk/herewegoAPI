@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
-REPOSITORY=/home/ubuntu
+REPOSITORY=/home/herewego
 
 cd $REPOSITORY
 
 JAR_NAME=$(ls $REPOSITORY/ | grep '.jar' | tail -n 1)
+echo ">jarname $JAR_NAME "
 JAR_PATH=$REPOSITORY/$JAR_NAME
-
+echo ">jarpath $JAR_NAME "
 CURRENT_PID=$(pgrep -f *.jar)
 
 if [ -z $CURRENT_PID ]
