@@ -1,8 +1,9 @@
 name: "1. Dev 배포"
 
 on:
-  merge:
+  pull_request:
     branches: [ "develop" ]
+    types: [closed]
 
 jobs:
 
