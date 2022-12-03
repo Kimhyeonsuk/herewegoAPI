@@ -19,23 +19,19 @@
 	<profiles>
 		<profile>
 			<id>local</id>
-
 			<properties>
-				<build.target>local</build.target>
 				<spring.profiles.active>local</spring.profiles.active>
 			</properties>
 		</profile>
 		<profile>
 			<id>dev</id>
 			<properties>
-				<build.target>dev</build.target>
 				<spring.profiles.active>dev</spring.profiles.active>
 			</properties>
 		</profile>
 		<profile>
 			<id>prod</id>
 			<properties>
-				<build.target>prod</build.target>
 				<spring.profiles.active>prod</spring.profiles.active>
 			</properties>
 		</profile>
@@ -84,9 +80,6 @@
 				<excludes>
 					<exclude>**/*.java</exclude>
 				</excludes>
-			</resource>
-			<resource>
-				<directory>src/main/resources-${environment}</directory>
 			</resource>
 		</resources>
 		<plugins>
