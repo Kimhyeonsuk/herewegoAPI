@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: @spring.profiles.active@
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: info
+
