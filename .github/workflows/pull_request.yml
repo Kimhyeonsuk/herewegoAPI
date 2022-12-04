@@ -27,7 +27,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       # Build
       - name: Build with Maven
-        run: mvn -Dmaven.test.skip=true -Pdev -B package -X --file pom.xml
+        run: mvn -Ptest -B package --file pom.xml
       # AWS 인증
       - name: AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
