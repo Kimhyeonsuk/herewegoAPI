@@ -26,7 +26,7 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       # Build
-      - name: Build with Maven
+      - name: Build and Test
         run: mvn -Ptest -B package --file pom.xml
       # AWS 인증
       - name: AWS credentials
@@ -36,7 +36,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
       - name: Report
-        uses: dorny/test-reporter@v1
+        uses: actions/dorny-test-reporter@v1
         if: always()
         with:
           artifact: test-results
