@@ -36,10 +36,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
       - name: Report
-        uses: actions/dorny-test-reporter@v1
+        uses: actions/upload-artifact@v2
         if: always()
         with:
-          artifact: test-results
           name: Test Result
           path: target/surefire-reports/*.xml
           reporter: jest-junit
