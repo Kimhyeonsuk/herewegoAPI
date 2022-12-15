@@ -28,7 +28,7 @@ jobs:
 
       #Install SSH key
       - name: install SSH key
-        uses: code-actions/shimataro-ssh-key-action@v2
+        uses: shimataro/ssh-key-action@v2
         with:
           key: ${{secrets.DEV_SSH_SECRETS}}
           known_hosts: i-0cbb1890e2925b2e0
