@@ -9,7 +9,14 @@ spring:
     sho-sql: true
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     defer-datasource-initialization: true
-
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl:
+        auto: true
+      hbm2ddl:
+        auto: true
+    generate-ddl: true
 server:
   port: 8080
 
