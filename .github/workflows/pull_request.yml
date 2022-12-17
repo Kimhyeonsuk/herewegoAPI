@@ -31,10 +31,7 @@ jobs:
         run: |
           mkdir ~/.ssh
           ssh-keyscan -H 43.200.211.133 >> ~/.ssh/known_hosts
-          eval "ssh-agent -s"
-          ssh-add - <<< "${{secrets.DEV_SSH_SECRETS}}"
-          ssh -fN -v -L 13306:43.200.211.133:3306 ec2-user@43.200.211.133 -p 22
-          make migrate
+          
       # Build
       - name: Build and Test
         run: mvn -Ptest -B package --file pom.xml
