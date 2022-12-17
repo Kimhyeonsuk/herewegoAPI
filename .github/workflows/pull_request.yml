@@ -17,5 +17,5 @@ jobs:
           host: 43.200.211.133
           username: ec2-user
           port: 22
-          key: ${{secrets.DEV_SSH_SECRETS}}
+          key: ${{secrets.DEV_SSH_PRIVATE_SECRETS}}
           script: whoami
