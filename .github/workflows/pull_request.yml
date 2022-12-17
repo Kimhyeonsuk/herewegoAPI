@@ -28,7 +28,7 @@ jobs:
 
       #connect jumphost with ssh
       - name: connect jumphost with ssh
-      - run: |
+        run: |
           mkdir ~/.ssh
           ssh-keyscan -H 43.200.211.133 >> ~/.ssh/known_hosts
 
