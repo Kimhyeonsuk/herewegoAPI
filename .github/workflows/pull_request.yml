@@ -32,7 +32,7 @@ jobs:
           mkdir ~/.ssh
           echo "${{secrets.DEV_SSH_SECRETS}}" > key
           sudo chmod 600 ./key
-          ssh -T -o StrictHostKeyChecking=no -i ./key -L 13306:43.200.211.133:3306 ec2-user@43.200.211.133
+          ssh -T -o StrictHostKeyChecking=no -i ./key -L 13306:ec2-user@43.200.211.133:3306 ec2-user@43.200.211.133
       # Build
       - name: Build and Test
         run: mvn -Ptest -B package --file pom.xml

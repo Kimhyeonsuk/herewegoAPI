@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:13306/test?autoReconnect=true
+    url: jdbc:mysql://43.200.211.133:3306/test?autoReconnect=true
     username: root
     password: Hwg2022!
     driver-class-name: com.mysql.cj.jdbc.Driver
