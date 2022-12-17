@@ -26,21 +26,13 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      #Install SSH key
-      - name: install SSH key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{secrets.DEV_SSH_SECRETS}}
-          known_hosts: i-0cbb1890e2925b2e0
-
       #connect jumphost with ssh
       - name: connect jumphost with ssh
-        uses: actions/cache@v2
-      - run: |
-          cd ~/.ssh
-          ls
-          ssh -fN -o StrictHostKeyChecking=no -p 22 ec2-user@$43.200.211.133 -L 13306:ec2-43-200-211-133.ap-northeast-2.compute.amazonaws.com:3306
-          echo '[SSH JUMP HOST]'
+        run: |
+          mkdir ~/.ssh
+          echo "${{secrets.DEV_SSH_SECRETS}}" > key
+          sudo chmod 600 ./key
+          ssh -T -o StrictHostKeyChecking=no -i ./key -L 13306:ec2-user@43.200.211.133:3306 ec2-user@43.200.211.133
       # Build
       - name: Build and Test
         run: mvn -Ptest -B package --file pom.xml
