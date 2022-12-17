@@ -32,7 +32,7 @@ jobs:
           mkdir ~/.ssh
           echo "${{secrets.DEV_SSH_SECRETS}}" > key
           sudo chmod 600 ./key
-          ssh -i ./key ec2-user@43.200.211.133 -p 22
+          ssh -T -i ./key ec2-user@43.200.211.133 -p 22
       # Build
       - name: Build and Test
         run: mvn -Ptest -B package --file pom.xml
