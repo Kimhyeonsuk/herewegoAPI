@@ -33,6 +33,7 @@ jobs:
           echo "${{secrets.DEV_SSH_SECRETS}}" > key
           sudo chmod 600 ./key
           ssh -fN -i ./key -L 13306:ec2-43-200-211-133.ap-northeast-2.compute.amazonaws.com:3306 ec2-user@43.200.211.133 -p 22
+          make migrate
       # Build
       - name: Build and Test
         run: mvn -Ptest -B package --file pom.xml
