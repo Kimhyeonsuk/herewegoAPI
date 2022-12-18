@@ -7,9 +7,9 @@
     </appender>
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <append>true</append>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>hwg_log.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>hwglog/%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>100MB</maxFileSize>
             <!-- 30일 지난 파일 삭제 -->
             <maxHistory>30</maxHistory>
