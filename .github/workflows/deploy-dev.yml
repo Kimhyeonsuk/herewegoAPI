@@ -42,7 +42,7 @@ jobs:
           aws-region: ap-northeast-2
       # S3에 빌드된 파일 업로드
       - name: Upload to AWS S3
-        run: aws s3 cp --region ap-northeast-2 herewegoapi.zip s3://here-we-go/codedeploy/herewegoapi.zip
+        run: aws s3 cp --region ap-northeast-2 herewegoapi.zip s3://here-we-go/herewego/herewegoapi.zip
       # Deploy
       - name: Code Deploy
         run: aws deploy create-deployment --application-name HWGCodeDeploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name HWGCodeDeployGroup --s3-location bucket=here-we-go,bundleType=zip,key=/herewego/herewegoapi.zip
