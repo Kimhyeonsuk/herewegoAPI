@@ -9,7 +9,7 @@
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>hwglog/hwg_log.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>hwg_log.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>100MB</maxFileSize>
             <!-- 30일 지난 파일 삭제 -->
             <maxHistory>30</maxHistory>
