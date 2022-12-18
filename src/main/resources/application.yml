@@ -2,6 +2,29 @@ spring:
   profiles:
     active: @spring.profiles.active@
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: "749103847510-gbbje4dhnm902l42hfnvl3rjqokocs8q.apps.googleusercontent.com"
+            client-secret: "MUSODP-tzCziqenf3yR4UnPgcj3-xYHcO1J"
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope: profile, email
+          github:
+            client-id: "e3023ac7cf83048a3dc2"
+            client-secret: "e0cf2729b5fa5tf13d4a7fa0d661b0911f016495"
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope: user
+
+  app:
+    auth:
+      token:
+        secret-key: "6B64DCA4E72F58EDIKU9AAB215FE7"
+        refresh-cookie-key: "refresh"
+    oauth2:
+      authorizedRedirectUri: "http://localhost:3000/oauth2/redirect"
+
 server:
   port: 8080
 
