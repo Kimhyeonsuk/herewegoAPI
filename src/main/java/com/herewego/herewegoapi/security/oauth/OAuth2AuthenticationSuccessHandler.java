@@ -5,12 +5,15 @@ import com.herewego.herewegoapi.exceptions.ErrorCode;
 import com.herewego.herewegoapi.exceptions.ForwardException;
 import com.herewego.herewegoapi.security.jwt.JwtTokenProvider;
 import com.herewego.herewegoapi.util.CookieUtil;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletException;
@@ -23,19 +26,22 @@ import java.util.Optional;
 
 import static com.herewego.herewegoapi.security.oauth.CookieAuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
+@Component
+@RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(OAuth2AuthenticationSuccessHandler.class);
     @Value("${app.oauth2.authorizedRedirectUri}")
     private String redirectUri;
 
-    @Autowired
-    JwtTokenProvider tokenProvider;
+    private final JwtTokenProvider tokenProvider;
 
     @Autowired
     CookieAuthorizationRequestRepository authorizationRequestRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+        LOGGER.debug("인증 완료 : {}");
+
         String targetUrl = determineTargetUrl(request, response, authentication);
 
         if (response.isCommitted()) {
@@ -76,6 +82,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private boolean isAuthorizedRedirectUri(String uri) {
         URI clientRedirectUri = URI.create(uri);
         URI authorizedUri = URI.create(redirectUri);
+        LOGGER.debug("생성된 uri {}, " , authorizedUri);
 
         if (authorizedUri.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
                 && authorizedUri.getPort() == clientRedirectUri.getPort()) {

@@ -6,11 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "League")
+@Table(name = "User")
 @Data
 @Builder
 @AllArgsConstructor
@@ -36,8 +38,15 @@ public class User {
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
 
-    private String githubUrl;
-    private String blogUrl;
+    @Column(name = "team_id")
+    private Integer teamId;
 
+    @Column(name = "refresh_token")
     private String refreshToken;
+
+    @org.hibernate.annotations.Generated(GenerationTime.INSERT) @Column(name = "created_date")
+    LocalDateTime createdDate;
+
+    @org.hibernate.annotations.Generated(GenerationTime.ALWAYS) @Column(name = "updated_date")
+    LocalDateTime updatedDate;
 }

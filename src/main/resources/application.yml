@@ -7,23 +7,24 @@ spring:
       client:
         registration:
           google:
-            client-id: "749103847510-gbbje4dhnm902l42hfnvl3rjqokocs8q.apps.googleusercontent.com"
-            client-secret: "MUSODP-tzCziqenf3yR4UnPgcj3-xYHcO1J"
+            client-id: "187461438837-03155gdchfp1fh060clgm32fe8tkjk0a.apps.googleusercontent.com"
+            client-secret: "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"
             redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
             scope: profile, email
           github:
-            client-id: "e3023ac7cf83048a3dc2"
-            client-secret: "e0cf2729b5fa5tf13d4a7fa0d661b0911f016495"
+            client-id: "db55c913262fcc69405a"
+            client-secret: "0f95e6d3b1cc8706f905b96801b5a778a34ba22b"
             redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
             scope: user
 
-  app:
-    auth:
-      token:
-        secret-key: "6B64DCA4E72F58EDIKU9AAB215FE7"
-        refresh-cookie-key: "refresh"
-    oauth2:
-      authorizedRedirectUri: "http://localhost:3000/oauth2/redirect"
+
+app:
+  auth:
+    token:
+      secret-key: "6B64DCA4E72F58EDIKU9AAB215FE7"
+      refresh-cookie-key: "refresh"
+  oauth2:
+    authorizedRedirectUri: "http://localhost:8080/health"
 
 server:
   port: 8080

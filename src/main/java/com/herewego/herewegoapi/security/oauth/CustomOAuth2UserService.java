@@ -11,6 +11,8 @@ import com.herewego.herewegoapi.security.CustomUserDetails;
 import com.herewego.herewegoapi.security.oauth.user.OAuth2UserInfo;
 import com.herewego.herewegoapi.security.oauth.user.OAuth2UserInfoFactory;
 import lombok.SneakyThrows;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -24,6 +26,7 @@ import java.util.Optional;
 
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomOAuth2UserService.class);
 
     @Autowired
     UserRepository userRepository;
@@ -45,6 +48,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private OAuth2User process(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) throws OAuthProcessingException {
         AuthProvider authProvider = AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase());
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(authProvider, oAuth2User.getAttributes());
+
+        LOGGER.debug("accessToken", oAuth2UserRequest.getAccessToken().toString());
+        LOGGER.debug("authProvider {}",authProvider.toString());
 
         if (userInfo.getEmail().isEmpty()) {
             throw new OAuthProcessingException("Email not found from OAuth2 provider");
@@ -68,6 +74,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         User user = User.builder()
                 .email(userInfo.getEmail())
                 .img(userInfo.getImageUrl())
+                .name(userInfo.getName())
                 .role(UserRole.USER)
                 .authProvider(authProvider)
                 .build();
