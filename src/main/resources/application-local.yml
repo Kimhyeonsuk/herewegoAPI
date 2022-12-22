@@ -22,6 +22,6 @@ server:
   port: 8080
 
 logging:
-  config: classpath:logback-dev.xml
+  config: classpath:logback-local.xml
   level:
-    root: info
+    root: debug
