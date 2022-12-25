@@ -41,6 +41,9 @@ public class User {
     @Column(name = "team_id")
     private Integer teamId;
 
+    @Column(name = "access_token")
+    private String accessToken;
+
     @Column(name = "refresh_token")
     private String refreshToken;
 

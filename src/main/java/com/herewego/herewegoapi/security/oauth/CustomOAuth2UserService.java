@@ -49,8 +49,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         AuthProvider authProvider = AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase());
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(authProvider, oAuth2User.getAttributes());
 
-        LOGGER.debug("accessToken", oAuth2UserRequest.getAccessToken().toString());
-        LOGGER.debug("authProvider {}",authProvider.toString());
+        LOGGER.debug("accessToken은 : {}", oAuth2UserRequest.getAccessToken().toString());
 
         if (userInfo.getEmail().isEmpty()) {
             throw new OAuthProcessingException("Email not found from OAuth2 provider");

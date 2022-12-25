@@ -32,18 +32,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = parseBearerToken(request);
+        String path = request.getRequestURI();
+        LOGGER.debug("path : {}", path);
+        if (!"/test".equals(path) && !"/health".equals(path) && !"/favicon.ico".equals(path)) {
+            String token = parseBearerToken(request);
 
-        // Validation Access Token
-        if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
-            Authentication authentication = tokenProvider.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            LOGGER.debug(authentication.getName() + "의 인증정보 저장");
-        } else {
-            LOGGER.debug("유효한 JWT 토큰이 없습니다.");
+            // Validation Access Token
+            if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
+                Authentication authentication = tokenProvider.getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                LOGGER.debug(authentication.getName() + "의 인증정보 저장");
+            } else {
+                LOGGER.debug("유효한 JWT 토큰이 없습니다.");
+            }
         }
 
         filterChain.doFilter(request, response);
+        return;
     }
 
     private String parseBearerToken(HttpServletRequest request) {
