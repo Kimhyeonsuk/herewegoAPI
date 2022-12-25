@@ -24,4 +24,4 @@ server:
 logging:
   config: classpath:logback-dev.xml
   level:
-    root: info
+    root: debug
