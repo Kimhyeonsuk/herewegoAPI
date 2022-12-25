@@ -56,7 +56,7 @@ public class JwtTokenProvider {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        return Jwts.builder()
+        String accessToken = Jwts.builder()
                 .signWith(io.jsonwebtoken.SignatureAlgorithm.HS512, SECRET_KEY)
                 .setSubject(userId)
                 .claim(AUTHORITIES_KEY, role)
@@ -64,6 +64,10 @@ public class JwtTokenProvider {
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .compact();
+
+        saveAccessToken(authentication, accessToken);
+
+        return accessToken;
     }
 
     public void createRefreshToken(Authentication authentication, HttpServletResponse response) {
@@ -90,9 +94,18 @@ public class JwtTokenProvider {
         response.addHeader("Set-Cookie", cookie.toString());
     }
 
+    private void saveAccessToken(Authentication authentication, String accessToken) {
+        CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+        Long id = Long.valueOf(user.getName());
+        LOGGER.debug("user Id for create Access Token, {}, user Name : {}", id, user.getName());
+
+        userRepository.updateAccessToken(id, accessToken);
+    }
+
     private void saveRefreshToken(Authentication authentication, String refreshToken) {
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
         Long id = Long.valueOf(user.getName());
+        LOGGER.debug("user Id for Save Refresh Token: {}, user Name : {}", id, user.getName());
 
         userRepository.updateRefreshToken(id, refreshToken);
     }
