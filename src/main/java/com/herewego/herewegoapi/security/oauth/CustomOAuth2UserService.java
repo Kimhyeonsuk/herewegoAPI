@@ -90,5 +90,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .email(userInfo.getEmail())
                 .authProvider(authProvider)
                 .build();
+        authorizationRepository.save(authorization);
     }
 }
