@@ -1,5 +1,6 @@
 package com.herewego.herewegoapi.security;
 
+import com.herewego.herewegoapi.common.AuthProvider;
 import com.herewego.herewegoapi.model.entity.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,12 +17,14 @@ import java.util.Map;
 public class CustomUserDetails implements UserDetails, OAuth2User {
     private Long id;
     private String email;
+    private AuthProvider authprovider;
     private Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;
 
-    public CustomUserDetails(Long id, String email, Collection<? extends GrantedAuthority> authorities) {
+    public CustomUserDetails(Long id, String email, AuthProvider authprovider, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.email = email;
+        this.authprovider = authprovider;
         this.authorities = authorities;
     }
 
@@ -32,6 +35,7 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
         return new CustomUserDetails(
                 user.getId(),
                 user.getEmail(),
+                user.getAuthProvider(),
                 authorities
         );
     }

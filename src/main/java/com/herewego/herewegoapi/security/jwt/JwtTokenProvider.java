@@ -1,6 +1,8 @@
 package com.herewego.herewegoapi.security.jwt;
 
+import com.herewego.herewegoapi.common.AuthProvider;
 import com.herewego.herewegoapi.exceptions.ForwardException;
+import com.herewego.herewegoapi.repository.AuthorizationRepository;
 import com.herewego.herewegoapi.repository.UserRepository;
 import com.herewego.herewegoapi.security.CustomUserDetails;
 import com.herewego.herewegoapi.security.oauth.OAuth2AuthenticationSuccessHandler;
@@ -38,7 +40,7 @@ public class JwtTokenProvider {
     private final String AUTHORITIES_KEY = "role";
 
     @Autowired
-    private UserRepository userRepository;
+    AuthorizationRepository authorizationRepository;
 
     public JwtTokenProvider(@Value("${app.auth.token.secret-key}")String secretKey, @Value("${app.auth.token.refresh-cookie-key}")String cookieKey) {
         this.SECRET_KEY = Base64.getEncoder().encodeToString(secretKey.getBytes());
@@ -51,14 +53,14 @@ public class JwtTokenProvider {
 
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
 
-        String userId = user.getName();
+        String userEmail = user.getUsername();
         String role = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
         String accessToken = Jwts.builder()
                 .signWith(io.jsonwebtoken.SignatureAlgorithm.HS512, SECRET_KEY)
-                .setSubject(userId)
+                .setSubject(userEmail)
                 .claim(AUTHORITIES_KEY, role)
                 .setIssuer("debrains")
                 .setIssuedAt(now)
@@ -96,18 +98,18 @@ public class JwtTokenProvider {
 
     private void saveAccessToken(Authentication authentication, String accessToken) {
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-        Long id = Long.valueOf(user.getName());
-        LOGGER.debug("user Id for create Access Token, {}, user Name : {}", id, user.getName());
+        String email = user.getUsername();
+        LOGGER.debug("user Id for Save Refresh Token: {}, user Name : {}", email, user.getName());
 
-        userRepository.updateAccessToken(id, accessToken);
+        authorizationRepository.updateAccessToken(email, accessToken);
     }
 
     private void saveRefreshToken(Authentication authentication, String refreshToken) {
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-        Long id = Long.valueOf(user.getName());
-        LOGGER.debug("user Id for Save Refresh Token: {}, user Name : {}", id, user.getName());
+        String email = user.getUsername();
+        LOGGER.debug("user Id for Save Refresh Token: {}, user Name : {}", email, user.getName());
 
-        userRepository.updateRefreshToken(id, refreshToken);
+        authorizationRepository.updateRefreshToken(email, refreshToken);
     }
 
     // Access Token을 검사하고 얻은 정보로 Authentication 객체 생성
@@ -118,7 +120,7 @@ public class JwtTokenProvider {
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
-        CustomUserDetails principal = new CustomUserDetails(Long.valueOf(claims.getSubject()), "", authorities);
+        CustomUserDetails principal = new CustomUserDetails(Long.valueOf(claims.getSubject()), "",null, authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }

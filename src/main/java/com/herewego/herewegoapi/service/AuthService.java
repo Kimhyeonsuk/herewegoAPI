@@ -1,5 +1,6 @@
 package com.herewego.herewegoapi.service;
 
+import com.herewego.herewegoapi.repository.AuthorizationRepository;
 import com.herewego.herewegoapi.repository.UserRepository;
 import com.herewego.herewegoapi.security.CustomUserDetails;
 import com.herewego.herewegoapi.security.jwt.JwtTokenProvider;
@@ -20,6 +21,9 @@ public class AuthService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    AuthorizationRepository authorizationRepository;
 
     @Autowired
     JwtTokenProvider tokenProvider;
@@ -43,7 +47,7 @@ public class AuthService {
         Long id = Long.valueOf(user.getName());
 
         // 3. Match Refresh Token
-        String savedToken = userRepository.getRefreshTokenById(id);
+        String savedToken = authorizationRepository.getRefreshTokenById(id);
 
         if (!savedToken.equals(oldRefreshToken)) {
             throw new RuntimeException("Not Matched Refresh Token");

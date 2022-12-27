@@ -40,6 +40,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         LOGGER.debug("인증 완료 : {}");
 
         String targetUrl = determineTargetUrl(request, response, authentication);
+        createJWTToken(response,authentication);
 
         if (response.isCommitted()) {
             LOGGER.debug("Response has already been committed");
