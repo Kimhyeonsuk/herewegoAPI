@@ -5,7 +5,9 @@ import com.herewego.herewegoapi.common.UserRole;
 import com.herewego.herewegoapi.exceptions.ErrorCode;
 import com.herewego.herewegoapi.exceptions.ForwardException;
 import com.herewego.herewegoapi.exceptions.OAuthProcessingException;
+import com.herewego.herewegoapi.model.entity.Authorization;
 import com.herewego.herewegoapi.model.entity.User;
+import com.herewego.herewegoapi.repository.AuthorizationRepository;
 import com.herewego.herewegoapi.repository.UserRepository;
 import com.herewego.herewegoapi.security.CustomUserDetails;
 import com.herewego.herewegoapi.security.oauth.user.OAuth2UserInfo;
@@ -30,6 +32,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    AuthorizationRepository authorizationRepository;
 
     // OAuth2UserRequest에 있는 Access Token으로 유저정보 get
     @Override
@@ -62,9 +67,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             if (authProvider != user.getAuthProvider()) {
                 throw new OAuthProcessingException("Wrong Match Auth Provider");
             }
-
         } else {			// 가입되지 않은 경우
             user = createUser(userInfo, authProvider);
+            createAuthorization(userInfo, authProvider);
         }
         return CustomUserDetails.create(user, oAuth2User.getAttributes());
     }
@@ -78,5 +83,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .authProvider(authProvider)
                 .build();
         return userRepository.save(user);
+    }
+
+    private void createAuthorization(OAuth2UserInfo userInfo, AuthProvider authProvider) {
+        Authorization authorization = Authorization.builder()
+                .email(userInfo.getEmail())
+                .authProvider(authProvider)
+                .build();
     }
 }

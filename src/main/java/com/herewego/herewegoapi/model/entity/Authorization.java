@@ -12,12 +12,12 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "User")
+@Table(name = "Authorization")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Authorization {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -25,24 +25,14 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(unique = true)
-    private String name;
-
-    private String description;
-
-    private String img;
-
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
-
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
 
-    @Column(name = "team_id")
-    private Integer teamId;
+    @Column(name = "access_token")
+    private String accessToken;
 
-    @Column(name = "game_unit")
-    private String gameUnit;
+    @Column(name = "refresh_token")
+    private String refreshToken;
 
     @org.hibernate.annotations.Generated(GenerationTime.INSERT) @Column(name = "created_date")
     LocalDateTime createdDate;
