@@ -24,7 +24,7 @@ app:
       secret-key: "6B64DCA4E72F58EDIKU9AAB215FE7"
       refresh-cookie-key: "refresh"
   oauth2:
-    authorizedRedirectUri: "http://localhost:8080/test"
+    authorizedRedirectUri: "http://hwgapp.com/test"
 
 server:
   port: 8080
