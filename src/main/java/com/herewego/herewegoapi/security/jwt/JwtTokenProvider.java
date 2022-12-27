@@ -120,7 +120,7 @@ public class JwtTokenProvider {
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
-        CustomUserDetails principal = new CustomUserDetails(Long.valueOf(claims.getSubject()), "",null, authorities);
+        CustomUserDetails principal = new CustomUserDetails(claims.getSubject(),null, authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }

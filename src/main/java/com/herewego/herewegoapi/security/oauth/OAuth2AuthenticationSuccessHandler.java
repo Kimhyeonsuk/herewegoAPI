@@ -40,7 +40,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         LOGGER.debug("인증 완료 : {}");
 
         String targetUrl = determineTargetUrl(request, response, authentication);
-        createJWTToken(response,authentication);
+        LOGGER.debug("Target Uri : {}", targetUrl);
 
         if (response.isCommitted()) {
             LOGGER.debug("Response has already been committed");
@@ -48,7 +48,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
         clearAuthenticationAttributes(request, response);
 
-        LOGGER.debug("Target Uri : {}", targetUrl);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
@@ -64,16 +63,19 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
 
-        if (redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
-            try {
-                throw new ForwardException(ErrorCode.RC500000,"redirect URIs are not matched");
-            } catch (ForwardException e) {
-                e.printStackTrace();
-            }
-        }
+////        if (redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
+//        if (redirectUri.isPresent()) {
+//            try {
+//                throw new ForwardException(ErrorCode.RC500000,"redirect URIs are not matched");
+//            } catch (ForwardException e) {
+//                e.printStackTrace();
+//            }
+//        }
+        String accessToken = createJWTToken(response,authentication);
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
         return UriComponentsBuilder.fromUriString(targetUrl)
+                .queryParam("authorization",accessToken)
                 .build().toUriString();
     }
 
