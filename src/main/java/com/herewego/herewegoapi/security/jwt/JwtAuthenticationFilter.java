@@ -1,17 +1,11 @@
 package com.herewego.herewegoapi.security.jwt;
 
-import com.herewego.herewegoapi.security.oauth.OAuth2AuthenticationSuccessHandler;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -36,6 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         LOGGER.debug("path : {}", path);
         if (!"/test".equals(path) && !"/health".equals(path) && !"/favicon.ico".equals(path)) {
             String token = parseBearerToken(request);
+            LOGGER.debug("Authorization: {}", token);
 
             // Validation Access Token
             if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
@@ -57,7 +52,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
-        LOGGER.debug("파싱 실패");
+        else {
+            LOGGER.debug("request 파싱 실패, uri param 파싱, 토큰 {}", bearerToken);
+
+            bearerToken = request.getParameter("authorization");
+            if (StringUtils.hasText(bearerToken)) {
+                LOGGER.debug("request 파싱 성공, 토큰 :{}", bearerToken);
+                return bearerToken;
+            }
+        }
+        LOGGER.debug("request 파싱 실패, response 파싱 실패, 토큰 {}", bearerToken);
         return null;
     }
 }
