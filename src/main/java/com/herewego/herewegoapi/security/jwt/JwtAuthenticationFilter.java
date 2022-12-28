@@ -1,5 +1,9 @@
 package com.herewego.herewegoapi.security.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.herewego.herewegoapi.exceptions.ErrorCode;
+import com.herewego.herewegoapi.exceptions.ForwardException;
+import com.herewego.herewegoapi.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,17 +32,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
         LOGGER.debug("path : {}", path);
+
+        ObjectMapper mapper = new ObjectMapper();
+
         if (!"/test".equals(path) && !"/health".equals(path) && !"/favicon.ico".equals(path)) {
             String token = parseBearerToken(request);
             LOGGER.debug("Authorization: {}", token);
 
             // Validation Access Token
-            if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
-                Authentication authentication = tokenProvider.getAuthentication(token);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                LOGGER.debug(authentication.getName() + "의 인증정보 저장");
-            } else {
-                LOGGER.debug("유효한 JWT 토큰이 없습니다.");
+            try {
+                if (tokenProvider.validateToken(token)) {
+                    Authentication authentication = tokenProvider.getAuthentication(token);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    LOGGER.debug(authentication.getName() + "의 인증정보 저장");
+                }
+            } catch (ForwardException e) {
+                String errorString = null;
+                try {
+                    LOGGER.debug("error 메시지: {}", e.getResponseMessage());
+                    errorString = mapper.writeValueAsString(ApiResponse.error(response, e));
+                } catch (ForwardException ex) {
+                    ex.printStackTrace();
+                }
+                response.getWriter().write(errorString);
             }
         }
 

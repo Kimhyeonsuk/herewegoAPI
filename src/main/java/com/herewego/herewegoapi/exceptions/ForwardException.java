@@ -19,6 +19,6 @@ public class ForwardException extends Exception{
     public ForwardException(ErrorCode errorCode, Object ... params) {
         super(String.format(errorCode.getMessage(), params));
         this.responseCode = errorCode.name();
-        this.responseMessage = errorCode.getMessage();
+        this.responseMessage = super.getMessage();
     }
 }

@@ -1,6 +1,7 @@
 package com.herewego.herewegoapi.security.jwt;
 
 import com.herewego.herewegoapi.common.AuthProvider;
+import com.herewego.herewegoapi.exceptions.ErrorCode;
 import com.herewego.herewegoapi.exceptions.ForwardException;
 import com.herewego.herewegoapi.repository.AuthorizationRepository;
 import com.herewego.herewegoapi.repository.UserRepository;
@@ -21,6 +22,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
@@ -125,18 +127,25 @@ public class JwtTokenProvider {
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
-    public Boolean validateToken(String token) {
+    public Boolean validateToken(String token) throws ForwardException {
+        if (!StringUtils.hasText(token)) {
+            LOGGER.info("비어있는 JWT 토큰 값");
+            throw new ForwardException(ErrorCode.RC400000, "JWT Token not exists");
+        }
+
         try {
             Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException e) {
             LOGGER.info("만료된 JWT 토큰입니다.");
+            throw new ForwardException(ErrorCode.RC400000, "Expired JWT Token");
         } catch (UnsupportedJwtException e) {
             LOGGER.info("지원되지 않는 JWT 토큰입니다.");
+            throw new ForwardException(ErrorCode.RC400000, "Not Supported JWT Token");
         } catch (IllegalStateException e) {
             LOGGER.info("JWT 토큰이 잘못되었습니다");
+            throw new ForwardException(ErrorCode.RC400000, "Illegal JWT Token");
         }
-        return false;
     }
 
     // Access Token 만료시 갱신때 사용할 정보를 얻기 위해 Claim 리턴
