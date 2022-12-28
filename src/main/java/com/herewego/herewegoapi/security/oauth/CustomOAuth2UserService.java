@@ -22,6 +22,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.Optional;
 
@@ -86,10 +87,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private void createAuthorization(OAuth2UserInfo userInfo, AuthProvider authProvider) {
-        Authorization authorization = Authorization.builder()
-                .email(userInfo.getEmail())
-                .authProvider(authProvider)
-                .build();
-        authorizationRepository.save(authorization);
+        Authorization authorization= authorizationRepository.findByEmailAndAuthProvider(userInfo.getEmail(), authProvider);
+        if (ObjectUtils.isEmpty(authorization)) {
+            authorizationRepository.save(Authorization.builder()
+                    .email(userInfo.getEmail())
+                    .authProvider(authProvider)
+                    .build());
+        }
     }
 }
