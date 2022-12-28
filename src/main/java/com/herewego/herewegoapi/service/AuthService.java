@@ -1,5 +1,6 @@
 package com.herewego.herewegoapi.service;
 
+import com.herewego.herewegoapi.exceptions.ForwardException;
 import com.herewego.herewegoapi.repository.AuthorizationRepository;
 import com.herewego.herewegoapi.repository.UserRepository;
 import com.herewego.herewegoapi.security.CustomUserDetails;
@@ -31,7 +32,7 @@ public class AuthService {
     public AuthService() {
     }
 
-    public String refreshToken(HttpServletRequest request, HttpServletResponse response, String oldAccessToken) {
+    public String refreshToken(HttpServletRequest request, HttpServletResponse response, String oldAccessToken) throws ForwardException {
         // 1. Validation Refresh Token
         String oldRefreshToken = CookieUtil.getCookie(request, cookieKey)
                 .map(Cookie::getValue).orElseThrow(() -> new RuntimeException("no Refresh Token Cookie"));
