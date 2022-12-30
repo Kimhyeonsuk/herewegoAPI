@@ -4,6 +4,7 @@ import com.herewego.herewegoapi.model.entity.User;
 import com.herewego.herewegoapi.repository.UserRepository;
 import com.herewego.herewegoapi.response.ApiResponse;
 import com.herewego.herewegoapi.security.CustomUserDetails;
+import com.herewego.herewegoapi.service.UserService;
 import com.herewego.herewegoapi.vo.RegisterUserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +18,9 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    UserService userService;
+
     @PostMapping(value = "/users")
     public Object registerUser(
             @RequestHeader(value = "Account-Token") String accountToken,
@@ -28,9 +32,9 @@ public class UserController {
 
     @GetMapping(value = "/users")
     public Object getUserInformation(
-            @RequestHeader(value = "Account-Token") String accountToken,
-            @RequestHeader(value = "Account-Id") String accountId,
-            @RequestBody RegisterUserVO registerUserVO)  {
+            @RequestHeader(value = "Authorization") String accountToken,
+            @RequestHeader(value = "Email") String email,
+            @RequestParam(value = "authorization") String accountTokenParam) {
 
         return ApiResponse.ok();
     }
