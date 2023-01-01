@@ -30,6 +30,8 @@ public interface AuthorizationRepository extends JpaRepository<Authorization, Lo
 
     Authorization findByEmailAndAuthProvider(String email, AuthProvider authProvider);
 
+    Authorization findByAccessToken(String accessToken);
+
     @Transactional
     void deleteByEmailAndAuthProvider(String email, AuthProvider authProvider);
 

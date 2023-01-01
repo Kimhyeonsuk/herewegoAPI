@@ -2,24 +2,15 @@ package com.herewego.herewegoapi.common;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.herewego.herewegoapi.exceptions.ForwardException;
-import com.herewego.herewegoapi.model.entity.Fixture;
-import com.herewego.herewegoapi.model.entity.FixtureStatistics;
-import com.herewego.herewegoapi.model.entity.League;
-import com.herewego.herewegoapi.model.entity.Team;
-import com.herewego.herewegoapi.repository.FIxtureStatRepository;
+import com.herewego.herewegoapi.repository.FixtureStatRepository;
 import com.herewego.herewegoapi.repository.FixtureRepository;
 import com.herewego.herewegoapi.repository.LeagueRepository;
 import com.herewego.herewegoapi.repository.TeamRepository;
-import com.herewego.herewegoapi.response.openapi.fixture.FixtureByIdResponseVO;
 import com.herewego.herewegoapi.response.openapi.fixture.Score;
-import org.assertj.core.util.DateUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.util.ObjectUtils;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class OpenAPICommunicatorTest {
@@ -31,7 +22,7 @@ public class OpenAPICommunicatorTest {
     FixtureRepository fixtureRepository;
 
     @Autowired
-    FIxtureStatRepository fixtureStatRepository;
+    FixtureStatRepository fixtureStatRepository;
 
     @Autowired
     LeagueRepository leagueRepository;

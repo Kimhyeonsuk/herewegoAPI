@@ -30,13 +30,14 @@ public class UserController {
         return ApiResponse.ok();
     }
 
+    //Parameter로 들어오는 authorization은 재인증 시에 redirect url에 토큰을 담아서 요청하기 때문에 받아온다.
     @GetMapping(value = "/users")
     public Object getUserInformation(
-            @RequestHeader(value = "Authorization") String accountToken,
-            @RequestHeader(value = "Email") String email,
-            @RequestParam(value = "authorization") String accountTokenParam) {
+            @RequestHeader(required = false, value = "Authorization") String accountToken,
+            @RequestHeader(required = false, value = "Email") String email,
+            @RequestParam(required = false, value = "authorization") String accountTokenParam) {
 
-        return ApiResponse.ok();
+        return userService.getUserInformation(email, accountToken, accountTokenParam);
     }
 
     @PutMapping(value = "/users/gameunit")
