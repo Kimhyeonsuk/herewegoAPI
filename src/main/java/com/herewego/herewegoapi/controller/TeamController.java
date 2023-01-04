@@ -1,6 +1,7 @@
 package com.herewego.herewegoapi.controller;
 
 
+import com.herewego.herewegoapi.exceptions.ForwardException;
 import com.herewego.herewegoapi.model.request.UpdateFavoriteTeamVO;
 import com.herewego.herewegoapi.response.ApiResponse;
 import com.herewego.herewegoapi.service.TeamService;
@@ -28,9 +29,9 @@ public class TeamController {
     public Object updateFavoriteTeam(
             @RequestHeader(value = "Authorization") String accountToken,
             @RequestHeader(value = "Email") String email,
-            @RequestBody UpdateFavoriteTeamVO updateFavoriteTeamVO) {
+            @RequestBody UpdateFavoriteTeamVO updateFavoriteTeamVO) throws ForwardException {
 
-        teamService.updateFavoriteTeam(updateFavoriteTeamVO.getTeamName(), updateFavoriteTeamVO.getLeagueName());
+        teamService.updateFavoriteTeam(email, updateFavoriteTeamVO.getTeamName(), updateFavoriteTeamVO.getLeagueName());
         return ApiResponse.ok();
 
     }
