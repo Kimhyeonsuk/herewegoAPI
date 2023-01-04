@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +36,9 @@ public class UserService {
     @Autowired
     FixtureStatRepository fixtureStatRepository;
 
+    @Autowired
+    UserDetailsRepository userDetailsRepository;
+
     public UserVO getUserInformation(String email, String accountToken, String accountTokenParam) {
         if (ObjectUtils.isEmpty(accountToken)) {
             accountToken = accountTokenParam;
@@ -55,7 +59,7 @@ public class UserService {
             return UserVO.builder()
                     .email(email)
                     .accessToken(accountToken)
-                    .favorites(createFavoriteList())
+                    .favorites(createFavoriteList(email))
                     .homeTeam(createTeamInfo(user.getTeamId(), Utils.gameUnitStringToList(user.getGameUnit())))
                     .gameUnit(Utils.gameUnitStringToList(user.getGameUnit()))
                     .build();
@@ -64,7 +68,7 @@ public class UserService {
             return UserVO.builder()
                     .email(email)
                     .accessToken(accountToken)
-                    .favorites(createFavoriteList())
+                    .favorites(createFavoriteList(email))
                     .gameUnit(Utils.gameUnitStringToList(user.getGameUnit()))
                     .build();
         }
@@ -72,21 +76,41 @@ public class UserService {
 
 
     //TODO : favorite team list create
-    //현재는 임의로 특정 팀 대입중
-    private List<FavoriteTeamVO> createFavoriteList() {
-        List<FavoriteTeamVO> favoriteTeamVOList = new ArrayList<>();
+    //현재는 임의로 리그명과 랭크 대입중
+    //TODO : 리그와 팀 관계 맺은 후 수정
+    public List<FavoriteTeamVO> createFavoriteList(String email) {
+        List<Integer>favoriteTeamIdList = getFavoritesTeamId(email);
 
-        Optional<Team> optionalTeam = Optional.ofNullable(teamRepository.findByTeamId(40));
-        optionalTeam.ifPresent(team -> {
-            favoriteTeamVOList.add(FavoriteTeamVO.builder()
-                            .teamName(team.getTeamName())
-                            .league("English Preamier League")
-                            .icon(team.getLogo())
-                            .rank(1)
-                            .build());
+        List<FavoriteTeamVO> favoriteTeamVOList = new ArrayList<>();
+        favoriteTeamIdList.forEach(id->{
+            Optional<Team> optionalTeam = Optional.ofNullable(teamRepository.findByTeamId(40));
+            optionalTeam.ifPresent(team -> {
+                favoriteTeamVOList.add(FavoriteTeamVO.builder()
+                        .teamName(team.getTeamName())
+                        .league("English Preamier League")
+                        .icon(team.getLogo())
+                        .rank(1)
+                        .build());
+            });
         });
 
         return favoriteTeamVOList;
+    }
+
+    public List<Integer> getFavoritesTeamId(String email){
+        List<Integer> teamIdList = new ArrayList<>();
+
+        //User detail 테이블에서 user의 즐겨찾기 팀 리스트 확인
+        Optional<UserDetails> optionalUserDetails = Optional.ofNullable(userDetailsRepository.findByEmail(email));
+        optionalUserDetails.ifPresent(userDetails -> {
+            String[] teamIdStrList = userDetails.getFavorites().split(",");
+            for (String teamIdStr : teamIdStrList) {
+                int teamId = Integer.parseInt(teamIdStr);
+                teamIdList.add(teamId);
+            }
+        });
+
+        return teamIdList;
     }
 
 
