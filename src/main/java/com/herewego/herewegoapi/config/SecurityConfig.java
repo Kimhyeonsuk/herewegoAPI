@@ -43,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/oauth2/**", "/auth/**").permitAll()
                 .antMatchers("/test").permitAll()
                 .antMatchers("/health").permitAll()
+                .antMatchers("/v1/join").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
