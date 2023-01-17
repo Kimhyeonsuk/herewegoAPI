@@ -15,4 +15,6 @@ public class JoinResponseVO {
     String jwtAccessToken;
 
     String jwtRefreshToken;
+
+    String userId;
 }
