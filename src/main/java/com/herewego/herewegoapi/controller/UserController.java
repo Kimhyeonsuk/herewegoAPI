@@ -1,6 +1,8 @@
 package com.herewego.herewegoapi.controller;
 
+import com.herewego.herewegoapi.exceptions.ForwardException;
 import com.herewego.herewegoapi.model.entity.User;
+import com.herewego.herewegoapi.model.request.JoinRequestVO;
 import com.herewego.herewegoapi.repository.UserRepository;
 import com.herewego.herewegoapi.response.ApiResponse;
 import com.herewego.herewegoapi.security.CustomUserDetails;
@@ -28,23 +30,22 @@ public class UserController {
     @Autowired
     CustomOAuth2UserService customOAuth2UserService;
 
-    @GetMapping(value = "/join")
+    @PostMapping(value = "/join")
     public Object registerUser(
-//            @RequestHeader(value = "Access-Token") String accountToken,
-//            @RequestHeader(value = "Email") String email) {
-    ){
+            @RequestHeader(value = "Access-Token") String accessToken,
+            @RequestHeader(value = "Refresh-Token") String refreshToken,
+            @RequestBody JoinRequestVO joinVO) throws ForwardException {
         LOGGER.debug("GET 요청 /v1/join");
-        return customOAuth2UserService.login("GOOGLE");
+        return customOAuth2UserService.login(accessToken, refreshToken, joinVO);
     }
 
-    //Parameter로 들어오는 authorization은 재인증 시에 redirect url에 토큰을 담아서 요청하기 때문에 받아온다.
     @GetMapping(value = "/users")
     public Object getUserInformation(
-            @RequestHeader(required = false, value = "Authorization") String accountToken,
+            @RequestHeader(required = false, value = "UserId") String userId,
             @RequestHeader(required = false, value = "Email") String email,
-            @RequestParam(required = false, value = "authorization") String accountTokenParam) {
+            @RequestHeader(required = false, value = "Authorization") String accountToken) {
 
-        return userService.getUserInformation(email, accountToken, accountTokenParam);
+        return userService.getUserInformation(userId, accountToken);
     }
 
     @PutMapping(value = "/users/gameunit")

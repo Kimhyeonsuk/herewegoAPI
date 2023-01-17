@@ -2,6 +2,7 @@ package com.herewego.herewegoapi.common;
 
 
 public class Consts {
+    public static final String USERID="testid";
     public static final String EMAIL = "testEmail@gmail.com";
     public static final AuthProvider AUTHPROVIDER = AuthProvider.GOOGLE;
     public static final String ACCESSTOKEN = "fdsafsdierw12312";

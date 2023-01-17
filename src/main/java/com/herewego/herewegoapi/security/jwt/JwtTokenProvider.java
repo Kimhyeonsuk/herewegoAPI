@@ -3,6 +3,7 @@ package com.herewego.herewegoapi.security.jwt;
 import com.herewego.herewegoapi.common.AuthProvider;
 import com.herewego.herewegoapi.exceptions.ErrorCode;
 import com.herewego.herewegoapi.exceptions.ForwardException;
+import com.herewego.herewegoapi.model.entity.User;
 import com.herewego.herewegoapi.repository.AuthorizationRepository;
 import com.herewego.herewegoapi.repository.UserRepository;
 import com.herewego.herewegoapi.security.CustomUserDetails;
@@ -39,7 +40,7 @@ public class JwtTokenProvider {
     private final String COOKIE_REFRESH_TOKEN_KEY;
     private final Long ACCESS_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 60;		// 1hour
     private final Long REFRESH_TOKEN_EXPIRE_LENGTH = 1000L * 60 * 60 * 24 * 7;	// 1week
-    private final String AUTHORITIES_KEY = "role";
+    private final String AUTHORITIES_KEY = "username";
 
     @Autowired
     AuthorizationRepository authorizationRepository;
@@ -98,6 +99,11 @@ public class JwtTokenProvider {
         response.addHeader("Set-Cookie", cookie.toString());
     }
 
+    public String createRefreshJWTToken(User user){
+        return createToken(user, REFRESH_TOKEN_EXPIRE_LENGTH);
+    }
+
+
     private void saveAccessToken(Authentication authentication, String accessToken) {
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
         String email = user.getUsername();
@@ -155,5 +161,28 @@ public class JwtTokenProvider {
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
+    }
+
+    public String createJWTAccessToken(User user) {
+        return createToken(user, ACCESS_TOKEN_EXPIRE_LENGTH);
+    }
+
+    private String createToken(User user, long expireLength){
+        Claims claims = Jwts.claims().setSubject(user.getEmail()); // payload부분에 들어갈 정보 조각
+        claims.put(AUTHORITIES_KEY, user.getEmail());
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + expireLength);
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(io.jsonwebtoken.SignatureAlgorithm.HS512, SECRET_KEY)
+                .compact();
+    }
+
+    public String getUserIdentifier(String token){
+        return Jwts.parser()
+                .setSigningKey(SECRET_KEY.getBytes())
+                .parseClaimsJws(token).getBody().getSubject();
     }
 }

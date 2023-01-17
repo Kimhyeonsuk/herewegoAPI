@@ -1,5 +1,5 @@
 package com.herewego.herewegoapi.common;
 
 public enum AuthProvider {
-    GOOGLE, GITHUB
+    GOOGLE, GITHUB, NONE
 }

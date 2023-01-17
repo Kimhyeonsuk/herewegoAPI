@@ -33,9 +33,7 @@ class UserServiceTest {
     @BeforeEach
     public void setup() {
         userDetailsRepository.save(UserDetails.builder()
-                .email(Consts.EMAIL)
-                .authProvider(Consts.AUTHPROVIDER)
-                .role(Consts.ROLE)
+                .userId(Consts.USERID)
                 .favorites(Consts.FAVORITETEAM)
                 .build());
 
@@ -54,7 +52,7 @@ class UserServiceTest {
 
     @AfterEach
     public void teardown() {
-        userDetailsRepository.deleteByEmailAndAuthProvider(Consts.EMAIL, Consts.AUTHPROVIDER);
+        userDetailsRepository.deleteByUserId(Consts.USERID);
         teamRepository.deleteByTeamId(Consts.TEAMID1);
         teamRepository.deleteByTeamId(Consts.TEAMID2);
     }

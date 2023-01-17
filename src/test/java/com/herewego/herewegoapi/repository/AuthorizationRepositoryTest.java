@@ -20,21 +20,19 @@ class AuthorizationRepositoryTest {
     @BeforeEach
     public void setup() {
         authorizationRepository.save(Authorization.builder()
-                .email(Consts.EMAIL)
-                .authProvider(Consts.AUTHPROVIDER)
-                .refreshToken(Consts.REFRESHTOKEN)
+                .userId(Consts.USERID)
                 .accessToken(Consts.ACCESSTOKEN)
                 .build());
     }
 
     @AfterEach
     public void teardown() {
-        authorizationRepository.deleteByEmailAndAuthProvider(Consts.EMAIL, Consts.AUTHPROVIDER);
+        authorizationRepository.deleteByUserId(Consts.USERID);
     }
 
     @Test
     void findByEmailAndAuthProvider() {
-        Authorization authorization = authorizationRepository.findByEmailAndAuthProvider(Consts.EMAIL, Consts.AUTHPROVIDER);
+        Authorization authorization = authorizationRepository.findByUserId(Consts.USERID);
 
         Assertions.assertNotNull(authorization);
     }

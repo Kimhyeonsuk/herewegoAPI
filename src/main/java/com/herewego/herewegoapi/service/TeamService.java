@@ -38,7 +38,7 @@ public class TeamService {
     }
 
     private void updateUserDetails(String email, Integer teamId) throws ForwardException {
-        Optional<UserDetails> userDetailsOptional = Optional.ofNullable(userDetailsRepository.findByEmail(email));
+        Optional<UserDetails> userDetailsOptional = Optional.ofNullable(userDetailsRepository.findByUserId(email));
 
         UserDetails userDetails = userDetailsOptional.orElseThrow(()->{
             LOGGER.debug("Cannot found user details by Email {}",email);

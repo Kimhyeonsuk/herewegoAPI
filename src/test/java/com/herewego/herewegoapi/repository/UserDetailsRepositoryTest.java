@@ -21,21 +21,19 @@ class UserDetailsRepositoryTest {
     @BeforeEach
     public void setup() {
         userDetailsRepository.save(UserDetails.builder()
-                .email(Consts.EMAIL)
-                .authProvider(Consts.AUTHPROVIDER)
-                .role(Consts.ROLE)
+                .userId(Consts.USERID)
                 .favorites(Consts.FAVORITETEAM)
                 .build());
     }
 
     @AfterEach
     public void teardown() {
-        userDetailsRepository.deleteByEmailAndAuthProvider(Consts.EMAIL, Consts.AUTHPROVIDER);
+        userDetailsRepository.deleteByUserId(Consts.USERID);
     }
 
     @Test
-    void findByEmailAndAuthProviderTest() {
-        UserDetails userDetails = userDetailsRepository.findByEmailAndAuthProvider(Consts.EMAIL, Consts.AUTHPROVIDER);
+    void findByUserIdTest() {
+        UserDetails userDetails = userDetailsRepository.findByUserId(Consts.USERID);
 
         Assertions.assertNotNull(userDetails);
     }

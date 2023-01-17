@@ -9,10 +9,9 @@ import javax.transaction.Transactional;
 
 @Repository
 public interface UserDetailsRepository extends JpaRepository<UserDetails,Long> {
-    UserDetails findByEmail(String email);
 
-    UserDetails findByEmailAndAuthProvider(String email, AuthProvider authProvider);
+    UserDetails findByUserId(String userId);
 
     @Transactional
-    void deleteByEmailAndAuthProvider(String email, AuthProvider authProvider);
+    void deleteByUserId(String useId);
 }

@@ -24,14 +24,8 @@ public class UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(unique = true, nullable = false)
-    private String email;
-
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
-
-    @Enumerated(EnumType.STRING)
-    private AuthProvider authProvider;
+    @Column(unique = true, nullable = false, name = "user_id")
+    private String userId;
 
     @Column
     String favorites;

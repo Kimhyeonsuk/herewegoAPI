@@ -39,36 +39,29 @@ public class UserService {
     @Autowired
     UserDetailsRepository userDetailsRepository;
 
-    public UserVO getUserInformation(String email, String accountToken, String accountTokenParam) {
-        if (ObjectUtils.isEmpty(accountToken)) {
-            accountToken = accountTokenParam;
-        }
-        if (ObjectUtils.isEmpty(email)) {
-            Optional<Authorization> authorizationOptional = Optional.ofNullable(authorizationRepository.findByAccessToken(accountToken));
-            Authorization authorization = authorizationOptional.orElseGet(()->Authorization.builder().build());
-            email = authorization.getEmail();
-        }
-
-        Optional<User> userOptional = userRepository.findByEmail(email);
+    public UserVO getUserInformation(String userId, String accountToken) {
+        Optional<User> userOptional = userRepository.findByUserId(userId);
 
         User user = userOptional.orElseGet(()->User.builder().build());
         LOGGER.debug("User Email : {} ", user.getEmail());
 
         //등록된 home team 유무에 따른 분기
         if (!ObjectUtils.isEmpty(user.getTeamId())) {
+            LOGGER.debug("user의 home Team Id가 존재");
             return UserVO.builder()
-                    .email(email)
+                    .email(user.getEmail())
                     .accessToken(accountToken)
-                    .favorites(createFavoriteList(email))
+                    .favorites(createFavoriteList(user.getUserId()))
                     .homeTeam(createTeamInfo(user.getTeamId(), Utils.gameUnitStringToList(user.getGameUnit())))
                     .gameUnit(Utils.gameUnitStringToList(user.getGameUnit()))
                     .build();
         }
         else {
+            LOGGER.debug("user의 home Team Id가 부재");
             return UserVO.builder()
-                    .email(email)
+                    .email(user.getEmail())
                     .accessToken(accountToken)
-                    .favorites(createFavoriteList(email))
+                    .favorites(createFavoriteList(user.getEmail()))
                     .gameUnit(Utils.gameUnitStringToList(user.getGameUnit()))
                     .build();
         }
@@ -78,8 +71,8 @@ public class UserService {
     //TODO : favorite team list create
     //현재는 임의로 리그명과 랭크 대입중
     //TODO : 리그와 팀 관계 맺은 후 수정
-    public List<FavoriteTeamVO> createFavoriteList(String email) {
-        List<Integer>favoriteTeamIdList = getFavoritesTeamId(email);
+    public List<FavoriteTeamVO> createFavoriteList(String userId) {
+        List<Integer>favoriteTeamIdList = getFavoritesTeamId(userId);
 
         List<FavoriteTeamVO> favoriteTeamVOList = new ArrayList<>();
         favoriteTeamIdList.forEach(id->{
@@ -97,11 +90,11 @@ public class UserService {
         return favoriteTeamVOList;
     }
 
-    public List<Integer> getFavoritesTeamId(String email){
+    public List<Integer> getFavoritesTeamId(String userId){
         List<Integer> teamIdList = new ArrayList<>();
 
         //User detail 테이블에서 user의 즐겨찾기 팀 리스트 확인
-        Optional<UserDetails> optionalUserDetails = Optional.ofNullable(userDetailsRepository.findByEmail(email));
+        Optional<UserDetails> optionalUserDetails = Optional.ofNullable(userDetailsRepository.findByUserId(userId));
         optionalUserDetails.ifPresent(userDetails -> {
             String[] teamIdStrList = userDetails.getFavorites().split(",");
             for (String teamIdStr : teamIdStrList) {

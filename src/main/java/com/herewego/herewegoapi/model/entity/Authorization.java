@@ -22,8 +22,8 @@ public class Authorization {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+    @Column(unique = true, nullable = false, name = "user_id")
+    private String userId;
 
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
