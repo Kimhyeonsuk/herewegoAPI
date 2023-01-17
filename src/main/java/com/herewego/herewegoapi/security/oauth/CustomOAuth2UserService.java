@@ -94,6 +94,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         return JoinResponseVO.builder()
                 .jwtAccessToken(accessJwtToken)
                 .jwtRefreshToken(refreshJwtToken)
+                .userId(user.getUserId())
                 .build();
     }
 
