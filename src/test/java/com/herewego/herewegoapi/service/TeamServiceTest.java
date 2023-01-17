@@ -28,9 +28,7 @@ class TeamServiceTest {
     @BeforeEach
     public void setup() {
         userDetailsRepository.save(UserDetails.builder()
-                .email(Consts.EMAIL)
-                .authProvider(Consts.AUTHPROVIDER)
-                .role(Consts.ROLE)
+                .userId(Consts.USERID)
                 .favorites(Consts.FAVORITETEAM2)
                 .build());
 
@@ -48,7 +46,7 @@ class TeamServiceTest {
     }
     @AfterEach
     public void teardown() {
-        userDetailsRepository.deleteByEmailAndAuthProvider(Consts.EMAIL, Consts.AUTHPROVIDER);
+        userDetailsRepository.deleteByUserId(Consts.USERID);
         teamRepository.deleteByTeamId(Consts.TEAMID1);
         teamRepository.deleteByTeamId(Consts.TEAMID2);
     }
@@ -56,9 +54,9 @@ class TeamServiceTest {
 
     @Test
     void updateFavoriteTeamTest_success() throws ForwardException {
-        teamService.updateFavoriteTeam(Consts.EMAIL, Consts.TEAMNAME2, Consts.LEAGUENAME);
+        teamService.updateFavoriteTeam(Consts.USERID, Consts.TEAMNAME2, Consts.LEAGUENAME);
 
-        UserDetails userDetails = userDetailsRepository.findByEmail(Consts.EMAIL);
+        UserDetails userDetails = userDetailsRepository.findByUserId(Consts.USERID);
         Assertions.assertNotNull(userDetails);
         Assertions.assertEquals(userDetails.getFavorites(), Consts.FAVORITETEAM);
     }

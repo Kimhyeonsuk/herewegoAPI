@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        if (!"/test".equals(path) && !"/health".equals(path) && !"/favicon.ico".equals(path)) {
+        if (!"/test".equals(path) && !"/health".equals(path) && !"/favicon.ico".equals(path) && !"/v1/join".equals(path)) {
             String token = parseBearerToken(request);
             LOGGER.debug("Authorization: {}", token);
 

@@ -33,9 +33,7 @@ class UserServiceTest {
     @BeforeEach
     public void setup() {
         userDetailsRepository.save(UserDetails.builder()
-                .email(Consts.EMAIL)
-                .authProvider(Consts.AUTHPROVIDER)
-                .role(Consts.ROLE)
+                .userId(Consts.USERID)
                 .favorites(Consts.FAVORITETEAM)
                 .build());
 
@@ -54,7 +52,7 @@ class UserServiceTest {
 
     @AfterEach
     public void teardown() {
-        userDetailsRepository.deleteByEmailAndAuthProvider(Consts.EMAIL, Consts.AUTHPROVIDER);
+        userDetailsRepository.deleteByUserId(Consts.USERID);
         teamRepository.deleteByTeamId(Consts.TEAMID1);
         teamRepository.deleteByTeamId(Consts.TEAMID2);
     }
@@ -68,7 +66,7 @@ class UserServiceTest {
 
     @Test
     public void getFavoriteTeamIdTest() {
-        List<Integer> favoriteTeamIdList = userService.getFavoritesTeamId(Consts.EMAIL);
+        List<Integer> favoriteTeamIdList = userService.getFavoritesTeamId(Consts.USERID);
 
         Assertions.assertNotNull(favoriteTeamIdList);
         Assertions.assertEquals(2,favoriteTeamIdList.size());
@@ -76,7 +74,7 @@ class UserServiceTest {
 
     @Test
     public void createFavoriteListTest() {
-        List<FavoriteTeamVO> favoriteTeamVOList = userService.createFavoriteList(Consts.EMAIL);
+        List<FavoriteTeamVO> favoriteTeamVOList = userService.createFavoriteList(Consts.USERID);
 
         Assertions.assertNotNull(favoriteTeamVOList);
         Assertions.assertEquals(2,favoriteTeamVOList.size());

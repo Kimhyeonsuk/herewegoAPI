@@ -20,20 +20,20 @@ public interface AuthorizationRepository extends JpaRepository<Authorization, Lo
 
     @Transactional
     @Modifying
-    @Query("UPDATE Authorization u SET u.refreshToken=:token WHERE u.email=:email")
-    void updateRefreshToken(@Param("email") String email, @Param("token") String token);
+    @Query("UPDATE Authorization u SET u.refreshToken=:token WHERE u.userId=:userId")
+    void updateRefreshToken(@Param("userId") String userId, @Param("token") String token);
 
     @Transactional
     @Modifying
-    @Query("UPDATE Authorization u SET u.accessToken=:token WHERE u.email=:email")
-    void updateAccessToken(@Param("email") String email, @Param("token") String token);
-
-    Authorization findByEmailAndAuthProvider(String email, AuthProvider authProvider);
+    @Query("UPDATE Authorization u SET u.accessToken=:token WHERE u.userId=:userId")
+    void updateAccessToken(@Param("userId") String userId, @Param("token") String token);
 
     Authorization findByAccessToken(String accessToken);
 
+    Authorization findByUserId(String userId);
+
     @Transactional
-    void deleteByEmailAndAuthProvider(String email, AuthProvider authProvider);
+    void deleteByUserId(String userId);
 
 
 }
