@@ -66,7 +66,7 @@ class UserServiceTest {
 
     @Test
     public void getFavoriteTeamIdTest() {
-        List<Integer> favoriteTeamIdList = userService.getFavoritesTeamId(Consts.EMAIL);
+        List<Integer> favoriteTeamIdList = userService.getFavoritesTeamId(Consts.USERID);
 
         Assertions.assertNotNull(favoriteTeamIdList);
         Assertions.assertEquals(2,favoriteTeamIdList.size());
@@ -74,7 +74,7 @@ class UserServiceTest {
 
     @Test
     public void createFavoriteListTest() {
-        List<FavoriteTeamVO> favoriteTeamVOList = userService.createFavoriteList(Consts.EMAIL);
+        List<FavoriteTeamVO> favoriteTeamVOList = userService.createFavoriteList(Consts.USERID);
 
         Assertions.assertNotNull(favoriteTeamVOList);
         Assertions.assertEquals(2,favoriteTeamVOList.size());

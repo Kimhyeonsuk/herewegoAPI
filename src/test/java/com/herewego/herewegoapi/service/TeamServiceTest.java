@@ -28,7 +28,7 @@ class TeamServiceTest {
     @BeforeEach
     public void setup() {
         userDetailsRepository.save(UserDetails.builder()
-                .userId(Consts.EMAIL)
+                .userId(Consts.USERID)
                 .favorites(Consts.FAVORITETEAM2)
                 .build());
 
@@ -54,7 +54,7 @@ class TeamServiceTest {
 
     @Test
     void updateFavoriteTeamTest_success() throws ForwardException {
-        teamService.updateFavoriteTeam(Consts.EMAIL, Consts.TEAMNAME2, Consts.LEAGUENAME);
+        teamService.updateFavoriteTeam(Consts.USERID, Consts.TEAMNAME2, Consts.LEAGUENAME);
 
         UserDetails userDetails = userDetailsRepository.findByUserId(Consts.USERID);
         Assertions.assertNotNull(userDetails);

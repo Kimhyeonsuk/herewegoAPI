@@ -89,7 +89,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         } else {			// 가입되지 않은 경우
             userRepository.save(user);
             createAuthroization(user, accessJwtToken, refreshJwtToken);
-            createUserDetails(user);
         }
 
         return JoinResponseVO.builder()
