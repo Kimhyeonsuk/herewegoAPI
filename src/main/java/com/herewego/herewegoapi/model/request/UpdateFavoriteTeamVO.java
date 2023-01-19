@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UpdateFavoriteTeamVO {
-    String teamName;
+    String teamId;
 
     String leagueName;
 }

@@ -22,6 +22,12 @@ public class Team {
     @Column(name = "team_id") @NonNull
     Integer teamId;
 
+    @Column(name = "league_id") @NonNull
+    Integer leagueId;
+
+    @Column(name = "season") @NonNull
+    Integer season;
+
     @Column(name = "team_name") @NonNull
     String teamName;
 

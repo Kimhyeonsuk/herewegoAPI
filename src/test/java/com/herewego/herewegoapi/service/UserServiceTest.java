@@ -39,12 +39,16 @@ class UserServiceTest {
 
         teamRepository.save(Team.builder()
                 .teamId(Consts.TEAMID1)
+                .leagueId(Consts.LEAGUEID)
+                .season(Consts.SEASON)
                 .teamName(Consts.TEAMNAME1)
                 .logo(Consts.LOGOURL)
                 .build());
 
         teamRepository.save(Team.builder()
                 .teamId(Consts.TEAMID2)
+                .leagueId(Consts.LEAGUEID)
+                .season(Consts.SEASON)
                 .teamName(Consts.TEAMNAME2)
                 .logo(Consts.LOGOURL)
                 .build());
