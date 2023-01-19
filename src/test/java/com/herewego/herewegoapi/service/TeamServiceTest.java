@@ -34,12 +34,16 @@ class TeamServiceTest {
 
         teamRepository.save(Team.builder()
                 .teamId(Consts.TEAMID1)
+                .leagueId(Consts.LEAGUEID)
+                .season(Consts.SEASON)
                 .teamName(Consts.TEAMNAME1)
                 .logo(Consts.LOGOURL)
                 .build());
 
         teamRepository.save(Team.builder()
                 .teamId(Consts.TEAMID2)
+                .leagueId(Consts.LEAGUEID)
+                .season(Consts.SEASON)
                 .teamName(Consts.TEAMNAME2)
                 .logo(Consts.LOGOURL)
                 .build());
@@ -54,7 +58,7 @@ class TeamServiceTest {
 
     @Test
     void updateFavoriteTeamTest_success() throws ForwardException {
-        teamService.updateFavoriteTeam(Consts.USERID, Consts.TEAMNAME2, Consts.LEAGUENAME);
+        teamService.updateFavoriteTeam(Consts.USERID, Consts.TEAMID2);
 
         UserDetails userDetails = userDetailsRepository.findByUserId(Consts.USERID);
         Assertions.assertNotNull(userDetails);

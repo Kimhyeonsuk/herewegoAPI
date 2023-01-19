@@ -23,32 +23,35 @@ public class TeamService {
     @Autowired
     TeamRepository teamRepository;
 
-    //TODO: 이후 팀과 리그간의 관계가 맺어진다면 수정해야한다.
-    public void updateFavoriteTeam(String email, String teamName, String leagueName) throws ForwardException {
-        Optional<Team>optional = Optional.ofNullable(teamRepository.findByTeamName(teamName));
+    public void updateFavoriteTeam(String userId, Integer teamId) throws ForwardException {
+        Optional<Team>optional = Optional.ofNullable(teamRepository.findByTeamId(teamId));
 
         Team team = optional.orElseThrow(()->{
-            LOGGER.debug("Cannot found team by teamName {}",teamName);
+            LOGGER.debug("Cannot found team by teamId {}",teamId);
            return new ForwardException(ErrorCode.RC400000,"Invalid Team");
         });
         LOGGER.debug("Team Name : {}",team.getTeamName());
 
-        updateUserDetails(email, team.getTeamId());
+        updateUserDetails(userId, teamId);
         return;
     }
 
-    private void updateUserDetails(String email, Integer teamId) throws ForwardException {
-        Optional<UserDetails> userDetailsOptional = Optional.ofNullable(userDetailsRepository.findByUserId(email));
+    private void updateUserDetails(String userId, Integer teamId) throws ForwardException {
+        Optional<UserDetails> userDetailsOptional = Optional.ofNullable(userDetailsRepository.findByUserId(userId));
 
-        UserDetails userDetails = userDetailsOptional.orElseThrow(()->{
-            LOGGER.debug("Cannot found user details by Email {}",email);
-            return new ForwardException(ErrorCode.RC400000,"Invalid User Email");
+        UserDetails userDetails = userDetailsOptional.orElseGet(()-> {
+            LOGGER.debug("Cannot found user details by userId {}", userId);
+            return UserDetails.builder()
+                    .userId(userId)
+                    .favorites("")
+                    .build();
         });
-
         String favoriteTeamList = userDetails.getFavorites();
         favoriteTeamList += "," + teamId.toString();
         userDetails.setFavorites(favoriteTeamList);
         userDetailsRepository.save(userDetails);
+
+
         return;
     }
 }

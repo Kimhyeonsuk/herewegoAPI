@@ -28,10 +28,10 @@ public class TeamController {
     @PutMapping(value = "/favorites")
     public Object updateFavoriteTeam(
             @RequestHeader(value = "Authorization") String accountToken,
-            @RequestHeader(value = "Email") String email,
-            @RequestBody UpdateFavoriteTeamVO updateFavoriteTeamVO) throws ForwardException {
+            @RequestHeader(value = "UserId") String userId,
+            @RequestParam("teamId") Integer teamId) throws ForwardException {
 
-        teamService.updateFavoriteTeam(email, updateFavoriteTeamVO.getTeamName(), updateFavoriteTeamVO.getLeagueName());
+        teamService.updateFavoriteTeam(userId, teamId);
         return ApiResponse.ok();
 
     }
