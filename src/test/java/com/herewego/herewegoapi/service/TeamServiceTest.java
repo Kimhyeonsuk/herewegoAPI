@@ -64,4 +64,13 @@ class TeamServiceTest {
         Assertions.assertNotNull(userDetails);
         Assertions.assertEquals(userDetails.getFavorites(), Consts.FAVORITETEAM);
     }
+
+    @Test
+    void updateFavoriteTeamTest_duplicatedTeam() throws ForwardException {
+        teamService.updateFavoriteTeam(Consts.USERID, Consts.TEAMID1);
+
+        UserDetails userDetails = userDetailsRepository.findByUserId(Consts.USERID);
+        Assertions.assertNotNull(userDetails);
+        Assertions.assertEquals(userDetails.getFavorites(), Consts.FAVORITETEAM2);
+    }
 }
