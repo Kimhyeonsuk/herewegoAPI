@@ -41,25 +41,23 @@ public class UserController {
 
     @GetMapping(value = "/users")
     public Object getUserInformation(
-            @RequestHeader(required = false, value = "UserId") String userId,
-            @RequestHeader(required = false, value = "Email") String email,
-            @RequestHeader(required = false, value = "Authorization") String accountToken) {
+            @RequestHeader(value = "UserId") String userId,
+            @RequestHeader(value = "Authorization") String accountToken) {
 
         return userService.getUserInformation(userId, accountToken);
     }
 
     @PutMapping(value = "/users/gameunit")
     public Object changeUserGameUnit(
-            @RequestHeader(value = "Account-Token") String accountToken,
-            @RequestHeader(value = "Account-Id") String accountId,
-            @RequestBody RegisterUserVO registerUserVO) {
+            @RequestHeader(value = "UserId") String userId,
+            @RequestHeader(value = "Authorization") String accountToken) {
 
         return ApiResponse.ok();
     }
 
-    @GetMapping("/useres/me")
-    @PreAuthorize("hasRole('USER')")
-    public User getCurrentUser(@AuthenticationPrincipal CustomUserDetails user) {
-        return userRepository.findById(user.getId()).orElseThrow(() -> new IllegalStateException("not found user"));
-    }
+//    @GetMapping("/useres/me")
+//    @PreAuthorize("hasRole('USER')")
+//    public User getCurrentUser(@AuthenticationPrincipal CustomUserDetails user) {
+//        return userRepository.findById(user.getId()).orElseThrow(() -> new IllegalStateException("not found user"));
+//    }
 }

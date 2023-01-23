@@ -16,16 +16,16 @@ public class TeamController {
     TeamService teamService;
 
     @GetMapping(value = "/teams")
-    public Object getUserInformation(
-            @RequestHeader(value = "Account-Token") String accountToken,
-            @RequestHeader(value = "Account-Id") String accountId,
-            @PathVariable("teamName") String teamName,
-            @PathVariable("league") String leagueName)  {
+    public Object getTeamInformation(
+            @RequestHeader(value = "UserId") String userId,
+            @RequestHeader(value = "Authorization") String accountToken,
+            @PathVariable("teamId") String teamName,
+            @PathVariable("leagueId") String leagueName)  {
 
         return ApiResponse.ok();
     }
 
-    @PutMapping(value = "/favorites")
+    @PutMapping(value = "teams/favorites")
     public Object updateFavoriteTeam(
             @RequestHeader(value = "Authorization") String accountToken,
             @RequestHeader(value = "UserId") String userId,
