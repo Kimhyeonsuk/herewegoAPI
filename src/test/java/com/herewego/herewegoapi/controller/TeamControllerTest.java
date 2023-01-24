@@ -26,8 +26,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -90,23 +91,27 @@ class TeamControllerTest {
         teamRepository.deleteByTeamId(Consts.TEAMID2);
     }
 
-    @Test
-    void getTeamInformation() {
-
-    }
 
     @Test
     void updateFavoriteTeam() throws Exception{
-        this.mockMvc.perform(put("/v1/teams/favorites")
+//        given
+        int teamId = Consts.TEAMID2;
+        String accountToken = Consts.ACCESSTOKEN;
+        String userId = Consts.USERID;
+
+        this.mockMvc.perform(put("/v1/teams/favorites?teamId="+Integer.toString(teamId))
+                .header("Authorization",accountToken)
+                .header("UserId",userId)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document.document(
+                        requestParameters(
+                                parameterWithName("teamId").description("Team Id")
+                        ),
                         responseFields(
-                                fieldWithPath("[].id").description("The id of the output"),
-                                fieldWithPath("[].name").description("The name of the output"),
-                                fieldWithPath("[].email").description("The email of the output"),
-                                fieldWithPath("[].date").description("The date of the output")
+                                fieldWithPath("resultCode").description("Result Code"),
+                                fieldWithPath("resultMessage").description("Result Message")
                 )));
     }
 }

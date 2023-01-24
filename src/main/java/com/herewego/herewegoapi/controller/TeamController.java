@@ -15,16 +15,6 @@ public class TeamController {
     @Autowired
     TeamService teamService;
 
-    @GetMapping(value = "/teams")
-    public Object getTeamInformation(
-            @RequestHeader(value = "UserId") String userId,
-            @RequestHeader(value = "Authorization") String accountToken,
-            @PathVariable("teamId") String teamName,
-            @PathVariable("leagueId") String leagueName)  {
-
-        return ApiResponse.ok();
-    }
-
     @PutMapping(value = "teams/favorites")
     public Object updateFavoriteTeam(
             @RequestHeader(value = "Authorization") String accountToken,

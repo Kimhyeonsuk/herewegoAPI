@@ -1,0 +1,40 @@
+= REST Service API Guide
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+= Resources
+
+== Person REST Service
+
+The Person provides the entry point into the service.
+
+=== Accessing the person GET with provided content
+
+==== Request structure
+
+== Update favorite Team [Put]
+
+Update FavoriteTeam
+
+
+include::{snippets}/team-controller-test/update-favorite-team/curl-request.adoc
+
+=== 요청 구조
+
+include::{snippets}/team-controller-test/update-favorite-team/http-request.adoc
+
+==== 요청 파라미터들
+
+include::{snippets}/team-controller-test/update-favorite-team/path-parameters.adoc
+
+=== 응답 구조
+
+include::{snippets}/team-controller-test/update-favorite-team/http-response.adoc
+
+==== 응답 파라미터들
+
+include::{snippets}/team-controller-test/update-favorite-team/response-fields.adoc
