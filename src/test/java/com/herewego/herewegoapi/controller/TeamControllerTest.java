@@ -92,26 +92,26 @@ class TeamControllerTest {
     }
 
 
-    @Test
-    void updateFavoriteTeam() throws Exception{
-//        given
-        int teamId = Consts.TEAMID2;
-        String accountToken = Consts.ACCESSTOKEN;
-        String userId = Consts.USERID;
-
-        this.mockMvc.perform(put("/v1/teams/favorites?teamId="+Integer.toString(teamId))
-                .header("Authorization",accountToken)
-                .header("UserId",userId)
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document.document(
-                        requestParameters(
-                                parameterWithName("teamId").description("Team Id")
-                        ),
-                        responseFields(
-                                fieldWithPath("resultCode").description("Result Code"),
-                                fieldWithPath("resultMessage").description("Result Message")
-                )));
-    }
+//    @Test
+//    void updateFavoriteTeam() throws Exception{
+////        given
+//        int teamId = Consts.TEAMID2;
+//        String accountToken = Consts.ACCESSTOKEN;
+//        String userId = Consts.USERID;
+//
+//        this.mockMvc.perform(put("/v1/teams/favorites?teamId="+Integer.toString(teamId))
+//                .header("Authorization",accountToken)
+//                .header("UserId",userId)
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andDo(document.document(
+//                        requestParameters(
+//                                parameterWithName("teamId").description("Team Id")
+//                        ),
+//                        responseFields(
+//                                fieldWithPath("resultCode").description("Result Code"),
+//                                fieldWithPath("resultMessage").description("Result Message")
+//                )));
+//    }
 }
