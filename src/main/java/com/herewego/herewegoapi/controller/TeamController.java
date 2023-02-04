@@ -15,8 +15,8 @@ public class TeamController {
     @Autowired
     TeamService teamService;
 
-    @PutMapping(value = "teams/favorites")
-    public Object updateFavoriteTeam(
+    @PutMapping(value = "/teams/favorites")
+    public Object updateFavoriteTeam (
             @RequestHeader(value = "Authorization") String accountToken,
             @RequestHeader(value = "UserId") String userId,
             @RequestParam("teamId") Integer teamId) throws ForwardException {
@@ -24,5 +24,12 @@ public class TeamController {
         teamService.updateFavoriteTeam(userId, teamId);
         return ApiResponse.ok();
 
+    }
+
+    @GetMapping(value = "/teams")
+    public Object getTeamList (
+            @RequestHeader(value = "Authorization") String accountToken,
+            @RequestHeader(value = "UserId") String userId) throws ForwardException {
+        return teamService.getTeamList();
     }
 }
