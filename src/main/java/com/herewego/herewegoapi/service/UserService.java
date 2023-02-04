@@ -113,6 +113,7 @@ public class UserService {
 
         Optional<Team> optionalTeam = Optional.ofNullable(teamRepository.findByTeamId(homeTeamId));
         optionalTeam.ifPresent(team -> {
+            teamInfoVO.setTeamId(homeTeamId);
             teamInfoVO.setTeamName(team.getTeamName());
             teamInfoVO.setIcon(team.getLogo());
         });

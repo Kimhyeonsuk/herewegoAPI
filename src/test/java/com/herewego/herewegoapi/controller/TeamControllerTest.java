@@ -8,6 +8,7 @@ import com.herewego.herewegoapi.repository.UserDetailsRepository;
 import com.herewego.herewegoapi.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,10 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -89,6 +92,24 @@ class TeamControllerTest {
         userDetailsRepository.deleteByUserId(Consts.USERID);
         teamRepository.deleteByTeamId(Consts.TEAMID1);
         teamRepository.deleteByTeamId(Consts.TEAMID2);
+    }
+
+    @Test
+    @DisplayName("Get All Team List")
+    void getTeamList() throws Exception {
+        /* given */
+        String accountToken = Consts.ACCESSTOKEN;
+        String userId = Consts.USERID;
+
+        /* when , then */
+        this.mockMvc.perform(get("/v1/teams")
+                .header("Authorization",accountToken)
+                .header("UserId",userId)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0]").exists())
+                .andExpect(jsonPath("$.[1]").exists());
     }
 
 
