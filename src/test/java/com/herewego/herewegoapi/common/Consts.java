@@ -14,6 +14,7 @@ public class Consts {
     public static final Integer TEAMID2 = 60;
     public static final Integer LEAGUEID = 39;
     public static final Integer SEASON = 2020;
+    public static final Integer SEASON2 = 2021;
     public static final String TEAMNAME1 = "LIV";
     public static final String TEAMNAME2  = "LEEDS";
     public static final String LOGOURL  = "test@test.com";
