@@ -3,6 +3,7 @@ package com.herewego.herewegoapi.repository;
 import com.herewego.herewegoapi.model.entity.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
@@ -37,5 +38,12 @@ public interface TeamRepository extends JpaRepository <Team, Long> {
         "ON T.id = subTeam.id " +
         "WHERE subTeam.rnk = 1", nativeQuery = true)
     List<Team> findLatestTeamInfoList();
+
+@Query(value = "SELECT * FROM Team " +
+        "WHERE team_id=:teamId " +
+        "ORDER BY season " +
+        "DESC LIMIT 1", nativeQuery = true)
+    Team findLatestTeamInfo(@Param("teamId") Integer teamId);
+
 
 }

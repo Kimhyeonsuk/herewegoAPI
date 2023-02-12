@@ -3,6 +3,7 @@ package com.herewego.herewegoapi.repository;
 import com.herewego.herewegoapi.common.Consts;
 import com.herewego.herewegoapi.model.entity.Team;
 import com.herewego.herewegoapi.model.entity.UserDetails;
+import org.apache.tomcat.util.bcel.Const;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +31,14 @@ class TeamRepositoryTest {
                 .build());
 
         teamRepository.save(Team.builder()
+                .teamId(Consts.TEAMID1)
+                .leagueId(Consts.LEAGUEID)
+                .season(Consts.SEASON2)
+                .teamName(Consts.TEAMNAME1)
+                .logo(Consts.LOGOURL)
+                .build());
+
+        teamRepository.save(Team.builder()
                 .teamId(Consts.TEAMID2)
                 .leagueId(Consts.LEAGUEID)
                 .season(Consts.SEASON)
@@ -48,5 +57,11 @@ class TeamRepositoryTest {
     void findLatestTeamInfoList() {
         List<Team> teamList = teamRepository.findLatestTeamInfoList();
         Assertions.assertEquals(2, teamList.size());
+    }
+
+    @Test
+    void findLatestTeamInfo() {
+        Team team = teamRepository.findLatestTeamInfo(Consts.TEAMID1);
+        Assertions.assertEquals(2021, team.getSeason());
     }
 }

@@ -1,12 +1,13 @@
 package com.herewego.herewegoapi.service;
 
+import com.herewego.herewegoapi.common.Utils;
 import com.herewego.herewegoapi.exceptions.ErrorCode;
 import com.herewego.herewegoapi.exceptions.ForwardException;
-import com.herewego.herewegoapi.model.entity.Team;
-import com.herewego.herewegoapi.model.entity.UserDetails;
+import com.herewego.herewegoapi.model.entity.*;
+import com.herewego.herewegoapi.model.response.LeagueVO;
+import com.herewego.herewegoapi.model.response.StatisticsVO;
 import com.herewego.herewegoapi.model.response.TeamInfoVO;
-import com.herewego.herewegoapi.repository.TeamRepository;
-import com.herewego.herewegoapi.repository.UserDetailsRepository;
+import com.herewego.herewegoapi.repository.*;
 import io.netty.util.internal.ObjectUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,15 @@ public class TeamService {
 
     @Autowired
     TeamRepository teamRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    LeagueRepository leagueRepository;
+
+    @Autowired
+    FixtureStatRepository fixtureStatRepository;
 
     public void updateFavoriteTeam(String userId, Integer teamId) throws ForwardException {
         if (validateTeamId(teamId)) {
@@ -89,5 +99,47 @@ public class TeamService {
 
         LOGGER.error("Team List Not Found(size: {})", teamList.size());
         throw new ForwardException(ErrorCode.RC401000);
+    }
+
+    public TeamInfoVO getTeamDetails(String userId, Integer teamId) throws ForwardException{
+        Optional<User> userOptional = userRepository.findByUserId(userId);
+        if (!userOptional.isPresent()) {
+            throw new ForwardException(ErrorCode.RC401000);
+        }
+        LOGGER.debug("Game Unit : {}", userOptional.get().getGameUnit());
+
+        Team team = teamRepository.findLatestTeamInfo(teamId);
+        if (ObjectUtils.isEmpty(team))
+            throw new ForwardException(ErrorCode.RC401000);
+        LOGGER.debug("Team ID: {}", team.getTeamName());
+
+
+        League league = leagueRepository.findByLeagueId(team.getLeagueId());
+        if(ObjectUtils.isEmpty(league))
+            throw new ForwardException(ErrorCode.RC401000);
+        LOGGER.debug("League name : {}", league.getLeagueName());
+
+        TeamInfoVO teamInfoVO = new TeamInfoVO().builder()
+                .teamId(team.getTeamId())
+                .teamName(team.getTeamName())
+                .league(league.getLeagueName())
+                .icon(team.getLogo())
+                .joining(new ArrayList<>(Arrays.asList(LeagueVO.builder()
+                        .leagueName(league.getLeagueName())
+                        .icon(league.getLogo()).build())))
+                .statistics(createStatistics(team.getTeamId(), Utils.gameUnitStringToList(userOptional.get().getGameUnit())))
+                .build();
+        return teamInfoVO;
+    }
+
+    private StatisticsVO createStatistics(int teamId, List<Integer> gameUnit) {
+        Optional<List<FixtureStatistics>> optionalFixtureStatistics =
+                Optional.ofNullable(fixtureStatRepository.getFixtureStatisticsList(teamId, gameUnit.get(gameUnit.size()-1)));
+
+        if (optionalFixtureStatistics.isPresent()) {
+            return new StatisticsVO(optionalFixtureStatistics.get());
+        }
+
+        return null;
     }
 }
