@@ -23,7 +23,6 @@ public class TeamController {
 
         teamService.updateFavoriteTeam(userId, teamId);
         return ApiResponse.ok();
-
     }
 
     @GetMapping(value = "/teams")
