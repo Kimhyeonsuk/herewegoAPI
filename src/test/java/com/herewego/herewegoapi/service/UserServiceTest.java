@@ -1,10 +1,12 @@
 package com.herewego.herewegoapi.service;
 
 import com.herewego.herewegoapi.common.Consts;
+import com.herewego.herewegoapi.model.entity.League;
 import com.herewego.herewegoapi.model.entity.Team;
 import com.herewego.herewegoapi.model.entity.UserDetails;
 import com.herewego.herewegoapi.model.response.FavoriteTeamVO;
 import com.herewego.herewegoapi.model.response.UserVO;
+import com.herewego.herewegoapi.repository.LeagueRepository;
 import com.herewego.herewegoapi.repository.TeamRepository;
 import com.herewego.herewegoapi.repository.UserDetailsRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -30,6 +32,9 @@ class UserServiceTest {
     @Autowired
     TeamRepository teamRepository;
 
+    @Autowired
+    LeagueRepository leagueRepository;
+
     @BeforeEach
     public void setup() {
         userDetailsRepository.save(UserDetails.builder()
@@ -52,6 +57,10 @@ class UserServiceTest {
                 .teamName(Consts.TEAMNAME2)
                 .logo(Consts.LOGOURL)
                 .build());
+        leagueRepository.save(League.builder()
+                .leagueId(Consts.LEAGUEID)
+                .leagueName(Consts.LEAGUENAME)
+                .logo(Consts.LOGOURL).build());
     }
 
     @AfterEach
@@ -59,6 +68,7 @@ class UserServiceTest {
         userDetailsRepository.deleteByUserId(Consts.USERID);
         teamRepository.deleteByTeamId(Consts.TEAMID1);
         teamRepository.deleteByTeamId(Consts.TEAMID2);
+        leagueRepository.deleteByLeagueId(Consts.LEAGUEID);
     }
 
     @Test

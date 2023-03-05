@@ -10,8 +10,6 @@ import org.slf4j.helpers.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -61,29 +59,29 @@ public class UserService {
             return UserVO.builder()
                     .email(user.getEmail())
                     .accessToken(accountToken)
-                    .favorites(createFavoriteList(user.getEmail()))
+                    .favorites(createFavoriteList(user.getUserId()))
                     .gameUnit(Utils.gameUnitStringToList(user.getGameUnit()))
                     .build();
         }
     }
 
 
-    //TODO : favorite team list create
-    //현재는 임의로 리그명과 랭크 대입중
-    //TODO : 리그와 팀 관계 맺은 후 수정
     public List<FavoriteTeamVO> createFavoriteList(String userId) {
         List<Integer>favoriteTeamIdList = getFavoritesTeamId(userId);
 
         List<FavoriteTeamVO> favoriteTeamVOList = new ArrayList<>();
         favoriteTeamIdList.forEach(id->{
-            Optional<Team> optionalTeam = Optional.ofNullable(teamRepository.findByTeamId(40));
+            Optional<Team> optionalTeam = Optional.ofNullable(teamRepository.findByTeamId(id));
             optionalTeam.ifPresent(team -> {
-                favoriteTeamVOList.add(FavoriteTeamVO.builder()
-                        .teamName(team.getTeamName())
-                        .league("English Preamier League")
-                        .icon(team.getLogo())
-                        .rank(1)
-                        .build());
+                League league = leagueRepository.findByLeagueId(team.getLeagueId());
+                if (!ObjectUtils.isEmpty(league)) {
+                    favoriteTeamVOList.add(FavoriteTeamVO.builder()
+                            .teamName(team.getTeamName())
+                            .league(league.getLeagueName())
+                            .icon(team.getLogo())
+                            .rank(1)
+                            .build());
+                }
             });
         });
 
@@ -106,8 +104,6 @@ public class UserService {
         return teamIdList;
     }
 
-
-    //TODO Team 과 league간의 관계를 맺은 후 vo 재성성, 현재는 임의의 리그를 joining league로 규정 짓고 대입중
     private TeamInfoVO createTeamInfo(int homeTeamId, List<Integer> gameUnit) {
         TeamInfoVO teamInfoVO = new TeamInfoVO();
 
@@ -117,9 +113,10 @@ public class UserService {
             teamInfoVO.setTeamName(team.getTeamName());
             teamInfoVO.setIcon(team.getLogo());
         });
+        int leagueId = optionalTeam.get().getLeagueId();
 
         //임의 값 넣는 부분
-        Optional<League> optionalLeague = Optional.ofNullable(leagueRepository.findByLeagueId(39));
+        Optional<League> optionalLeague = Optional.ofNullable(leagueRepository.findByLeagueId(leagueId));
         optionalLeague.ifPresent(league -> {
             teamInfoVO.setLeague(league.getLeagueName());
             List<LeagueVO> joining = new ArrayList<>();
@@ -127,7 +124,6 @@ public class UserService {
                     .leagueName(league.getLeagueName())
                     .icon(league.getLogo())
                     .build());
-
             teamInfoVO.setJoining(joining);
         });
         teamInfoVO.setTable(1);
