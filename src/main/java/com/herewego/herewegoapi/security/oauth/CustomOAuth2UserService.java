@@ -88,6 +88,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             updateAuthroization(user, accessJwtToken, refreshJwtToken);
         } else {			// 가입되지 않은 경우
             userRepository.save(user);
+            createUserDetails(user);
             createAuthroization(user, accessJwtToken, refreshJwtToken);
         }
 

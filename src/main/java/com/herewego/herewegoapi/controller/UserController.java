@@ -1,7 +1,10 @@
 package com.herewego.herewegoapi.controller;
 
+import com.herewego.herewegoapi.common.GameUnitValidator;
+import com.herewego.herewegoapi.exceptions.ErrorCode;
 import com.herewego.herewegoapi.exceptions.ForwardException;
 import com.herewego.herewegoapi.model.entity.User;
+import com.herewego.herewegoapi.model.request.ChangeGameUnitDTO;
 import com.herewego.herewegoapi.model.request.JoinRequestVO;
 import com.herewego.herewegoapi.repository.UserRepository;
 import com.herewego.herewegoapi.response.ApiResponse;
@@ -14,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,13 +26,14 @@ public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
     UserService userService;
 
     @Autowired
     CustomOAuth2UserService customOAuth2UserService;
+
+    @Autowired
+    GameUnitValidator gameUnitValidator;
+
 
     @PostMapping(value = "/join")
     public Object registerUser(
@@ -50,8 +55,13 @@ public class UserController {
     @PutMapping(value = "/users/gameunit")
     public Object changeUserGameUnit(
             @RequestHeader(value = "UserId") String userId,
-            @RequestHeader(value = "Authorization") String accountToken) {
-
+            @RequestHeader(value = "Authorization") String accountToken,
+            @RequestBody ChangeGameUnitDTO changeGameUnitDTO, BindingResult bindingResult) throws ForwardException {
+        gameUnitValidator.validate(changeGameUnitDTO,bindingResult);
+        if (bindingResult.hasErrors()) {
+            LOGGER.error("Bad Request : Invalid String");
+            throw new ForwardException(ErrorCode.RC400000,"Invlid GameUnit String");
+        }
         return ApiResponse.ok();
     }
 }
