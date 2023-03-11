@@ -62,6 +62,7 @@ public class UserController {
             LOGGER.error("Bad Request : Invalid String");
             throw new ForwardException(ErrorCode.RC400000,"Invlid GameUnit String");
         }
+        userService.updateGameUnit(userId, changeGameUnitDTO.getAsis(), changeGameUnitDTO.getTobe());
         return ApiResponse.ok();
     }
 }

@@ -1,6 +1,8 @@
 package com.herewego.herewegoapi.service;
 
 import com.herewego.herewegoapi.common.Utils;
+import com.herewego.herewegoapi.exceptions.ErrorCode;
+import com.herewego.herewegoapi.exceptions.ForwardException;
 import com.herewego.herewegoapi.model.entity.*;
 import com.herewego.herewegoapi.model.response.*;
 import com.herewego.herewegoapi.repository.*;
@@ -146,7 +148,13 @@ public class UserService {
         return null;
     }
 
-    public void updateGameUnit(String asIs, String toBe) {
+    public void updateGameUnit(String userId, String asIs, String toBe) throws ForwardException {
+        Optional<User> userOptional = userRepository.findByUserId(userId);
 
+        User user = userOptional.orElseThrow(()->new ForwardException(ErrorCode.RC401000));
+        LOGGER.debug("User Email : {} ", user.getEmail());
+
+        user.setGameUnit(toBe);
+        userRepository.save(user);
     }
 }
