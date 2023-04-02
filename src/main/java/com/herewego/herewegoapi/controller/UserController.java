@@ -49,7 +49,7 @@ public class UserController {
             @RequestHeader(value = "UserId") String userId,
             @RequestHeader(value = "Authorization") String accountToken) {
 
-        return userService.getUserInformation(userId, accountToken);
+        return userService.getUserInformation(userId);
     }
 
     @PutMapping(value = "/users/gameunit")
