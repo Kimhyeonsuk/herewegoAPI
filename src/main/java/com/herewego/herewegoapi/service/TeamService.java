@@ -71,7 +71,10 @@ public class TeamService {
         userDetailsRepository.save(userDetails);
     }
 
-    private String manageDuplicatedTeamId(String favoriteTeamList, Integer teamId) {
+    public String manageDuplicatedTeamId(String favoriteTeamList, Integer teamId) {
+        if (ObjectUtils.isEmpty(favoriteTeamList)) {
+            return teamId.toString();
+        }
         List<Integer> teamList = Arrays.stream(favoriteTeamList.split(",")).map(s -> Integer.parseInt(s)).collect(Collectors.toList());
         if (!teamList.contains(teamId)) {
             favoriteTeamList += "," + teamId.toString();
