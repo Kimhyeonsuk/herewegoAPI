@@ -12,24 +12,9 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 public class UserVO {
-    String email;
-
-    String accessToken;
-
-    TeamInfoVO homeTeam;
+    Integer homeTeamId;
 
     List<FavoriteTeamVO> favorites;
 
     List<Integer> gameUnit;
-
-    @Override
-    public String toString() {
-        return "{" +
-                "email='" + email + '\'' +
-                ", accessToken='" + accessToken + '\'' +
-                ", homeTeam=" + homeTeam +
-                ", favorites=" + favorites +
-                ", gameUnit=" + gameUnit +
-                '}';
-    }
 }

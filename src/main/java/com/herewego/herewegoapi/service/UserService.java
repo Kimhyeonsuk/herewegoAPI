@@ -39,32 +39,17 @@ public class UserService {
     @Autowired
     UserDetailsRepository userDetailsRepository;
 
-    public UserVO getUserInformation(String userId, String accountToken) {
+    public UserVO getUserInformation(String userId) {
         Optional<User> userOptional = userRepository.findByUserId(userId);
 
         User user = userOptional.orElseGet(()->User.builder().build());
         LOGGER.debug("User Email : {} ", user.getEmail());
 
-        //등록된 home team 유무에 따른 분기
-        if (!ObjectUtils.isEmpty(user.getTeamId())) {
-            LOGGER.debug("user의 home Team Id가 존재");
-            return UserVO.builder()
-                    .email(user.getEmail())
-                    .accessToken(accountToken)
-                    .favorites(createFavoriteList(user.getUserId()))
-                    .homeTeam(createTeamInfo(user.getTeamId(), Utils.gameUnitStringToList(user.getGameUnit())))
-                    .gameUnit(Utils.gameUnitStringToList(user.getGameUnit()))
-                    .build();
-        }
-        else {
-            LOGGER.debug("user의 home Team Id가 부재");
-            return UserVO.builder()
-                    .email(user.getEmail())
-                    .accessToken(accountToken)
-                    .favorites(createFavoriteList(user.getUserId()))
-                    .gameUnit(Utils.gameUnitStringToList(user.getGameUnit()))
-                    .build();
-        }
+        return UserVO.builder()
+                .homeTeamId(user.getTeamId())
+                .favorites(createFavoriteList(user.getUserId()))
+                .gameUnit(Utils.gameUnitStringToList(user.getGameUnit()))
+                .build();
     }
 
 

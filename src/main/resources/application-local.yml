@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:13306/herewego?autoReconnect=true
+    url: jdbc:mysql://43.200.211.133:3306/herewego?autoReconnect=true
     username: root
     password: Hwg2022!  #TODO: parameter store 저장
     driver-class-name: com.mysql.cj.jdbc.Driver
