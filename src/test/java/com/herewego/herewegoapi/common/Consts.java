@@ -3,6 +3,7 @@ package com.herewego.herewegoapi.common;
 
 public class Consts {
     public static final String USERID="testid";
+    public static final String USER_ID_2 = "testId2";
     public static final String EMAIL = "testEmail@gmail.com";
     public static final AuthProvider AUTHPROVIDER = AuthProvider.GOOGLE;
     public static final String ACCESSTOKEN = "fdsafsdierw12312";
@@ -10,6 +11,8 @@ public class Consts {
     public static final UserRole ROLE = UserRole.USER;
     public static final String FAVORITETEAM = "40,60";
     public static final String FAVORITETEAM2 = "40";
+    public static final String FAVORITE_TEAM_3 = "40,60,90,10";
+    public static final String DELETED_FAVORITE_TEAM_1 = "60,90,10";
     public static final Integer TEAMID1 = 40;
     public static final Integer TEAMID2 = 60;
     public static final Integer LEAGUEID = 39;
