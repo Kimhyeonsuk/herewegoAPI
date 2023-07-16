@@ -89,6 +89,9 @@ public class TeamService {
         List<Integer> newTeamList = teamList.stream().filter(teamId -> !teamId.equals(deletedTeamId)).collect(Collectors.toList());
 
         StringBuilder sb = new StringBuilder();
+        if (newTeamList.size()==0) {
+            return "";
+        }
         for (Integer t : newTeamList) {
             sb.append(t);
             sb.append(",");
