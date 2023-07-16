@@ -86,7 +86,7 @@ public class TeamService {
     }
 
     public String deleteTeamFromFavoriteTeamList(List<Integer> teamList, Integer deletedTeamId) {
-        List<Integer> newTeamList = teamList.stream().filter(teamId -> teamId==deletedTeamId).collect(Collectors.toList());
+        List<Integer> newTeamList = teamList.stream().filter(teamId -> !teamId.equals(deletedTeamId)).collect(Collectors.toList());
 
         StringBuilder sb = new StringBuilder();
         for (Integer t : newTeamList) {
@@ -94,7 +94,7 @@ public class TeamService {
             sb.append(",");
         }
 
-        return sb.substring(0, sb.lastIndexOf(sb.toString())).toString();
+        return sb.substring(0, sb.length()-1).toString();
     }
 
     public List<TeamInfoVO> getTeamList() throws ForwardException{

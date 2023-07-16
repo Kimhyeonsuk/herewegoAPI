@@ -15,10 +15,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
-@Profile("test")
+@ActiveProfiles("test")
 class TeamServiceTest {
     @Autowired
     TeamService teamService;
@@ -67,6 +68,7 @@ class TeamServiceTest {
     @AfterEach
     public void teardown() {
         userDetailsRepository.deleteByUserId(Consts.USERID);
+        userDetailsRepository.deleteByUserId(Consts.USER_ID_2);
         teamRepository.deleteByTeamId(Consts.TEAMID1);
         teamRepository.deleteByTeamId(Consts.TEAMID2);
         leagueRepository.deleteByLeagueId(Consts.LEAGUEID);
