@@ -14,9 +14,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
+@ActiveProfiles("test")
 class TeamServiceTest {
     @Autowired
     TeamService teamService;
@@ -35,6 +38,11 @@ class TeamServiceTest {
         userDetailsRepository.save(UserDetails.builder()
                 .userId(Consts.USERID)
                 .favorites(Consts.FAVORITETEAM2)
+                .build());
+
+        userDetailsRepository.save(UserDetails.builder()
+                .userId(Consts.USER_ID_2)
+                .favorites(Consts.FAVORITE_TEAM_3)
                 .build());
 
         teamRepository.save(Team.builder()
@@ -60,6 +68,7 @@ class TeamServiceTest {
     @AfterEach
     public void teardown() {
         userDetailsRepository.deleteByUserId(Consts.USERID);
+        userDetailsRepository.deleteByUserId(Consts.USER_ID_2);
         teamRepository.deleteByTeamId(Consts.TEAMID1);
         teamRepository.deleteByTeamId(Consts.TEAMID2);
         leagueRepository.deleteByLeagueId(Consts.LEAGUEID);
@@ -81,6 +90,15 @@ class TeamServiceTest {
 
         UserDetails userDetails = userDetailsRepository.findByUserId(Consts.USERID);
         Assertions.assertNotNull(userDetails);
-        Assertions.assertEquals(userDetails.getFavorites(), Consts.FAVORITETEAM2);
+        Assertions.assertEquals("", userDetails.getFavorites());
+    }
+
+    @Test
+    void updateFavoriteTeamTest_duplicatedTeam_2() throws ForwardException {
+        teamService.updateFavoriteTeam(Consts.USER_ID_2, Consts.TEAMID1);
+
+        UserDetails userDetails = userDetailsRepository.findByUserId(Consts.USER_ID_2);
+        Assertions.assertNotNull(userDetails);
+        Assertions.assertEquals(Consts.DELETED_FAVORITE_TEAM_1, userDetails.getFavorites());
     }
 }

@@ -79,7 +79,25 @@ public class TeamService {
         if (!teamList.contains(teamId)) {
             favoriteTeamList += "," + teamId.toString();
         }
+        else {
+            favoriteTeamList = deleteTeamFromFavoriteTeamList(teamList, teamId);
+        }
         return favoriteTeamList;
+    }
+
+    public String deleteTeamFromFavoriteTeamList(List<Integer> teamList, Integer deletedTeamId) {
+        List<Integer> newTeamList = teamList.stream().filter(teamId -> !teamId.equals(deletedTeamId)).collect(Collectors.toList());
+
+        StringBuilder sb = new StringBuilder();
+        if (newTeamList.size()==0) {
+            return "";
+        }
+        for (Integer t : newTeamList) {
+            sb.append(t);
+            sb.append(",");
+        }
+
+        return sb.substring(0, sb.length()-1).toString();
     }
 
     public List<TeamInfoVO> getTeamList() throws ForwardException{
