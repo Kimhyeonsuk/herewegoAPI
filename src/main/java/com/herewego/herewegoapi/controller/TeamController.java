@@ -34,7 +34,7 @@ public class TeamController {
 
     @GetMapping(value = "/teams/{teamId}")
     public Object getTeamInfo (
-            @RequestHeader(value = "Authorization") String acocuntToken,
+            @RequestHeader(value = "Authorization") String accountToken,
             @RequestHeader(value = "UserId") String userId,
             @PathVariable(value = "teamId") Integer teamId) throws ForwardException {
         return teamService.getTeamDetails(userId, teamId);
